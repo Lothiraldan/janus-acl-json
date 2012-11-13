@@ -50,6 +50,10 @@ public enum ACLRepresentation {
 	/**
 	 * 
 	 */
+	JSON("set.acl.rep.json.std"),
+	/**
+	 * 
+	 */
 	XML("fipa.acl.rep.xml.std"); //$NON-NLS-1$
 	  
 	private final String value;

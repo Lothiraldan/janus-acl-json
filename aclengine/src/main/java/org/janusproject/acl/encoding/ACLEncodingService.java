@@ -123,7 +123,7 @@ public class ACLEncodingService
 	 * @return the payload
 	 */
 	private static byte[] buildEncodedACLMessage(byte[] encodedContent, byte[] encodedEnvelope) {
-	
+
 		int envelopeLength = encodedEnvelope.length;
 		int contentLength = encodedContent.length;
 		
@@ -247,6 +247,9 @@ public class ACLEncodingService
 		} 
     	else if (aclRepresentation.equalsIgnoreCase(ACLRepresentation.XML.getValue())) {
     		this.contentEncodingService = new XMLACLCodec();
+    	}
+    	else if (aclRepresentation.equalsIgnoreCase(ACLRepresentation.JSON.getValue())) {
+    		this.contentEncodingService = new JSONACLCodec();
 		} else {
 			throw new UnspecifiedACLMessageRepresentationException();
 		}
@@ -277,6 +280,10 @@ public class ACLEncodingService
     	else if (aclRepresentation.equalsIgnoreCase(ACLRepresentation.XML.getValue())) {
     		this.contentEncodingService = new XMLACLCodec();
     		this.envelopeEncodingService = new XMLEnvelopeCodec();
+    	}
+    	else if (aclRepresentation.equalsIgnoreCase(ACLRepresentation.JSON.getValue())) {
+    		this.contentEncodingService = new JSONACLCodec();
+    		this.envelopeEncodingService = new BitEfficientEnvelopeCodec();
 		} else {
 			throw new UnspecifiedACLMessageRepresentationException();
 		}
