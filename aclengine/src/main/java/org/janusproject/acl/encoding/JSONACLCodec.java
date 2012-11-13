@@ -3,10 +3,8 @@ package org.janusproject.acl.encoding;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
-import org.arakhne.vmutil.locale.Locale;
 import org.janusproject.acl.ACLMessage;
 import org.janusproject.acl.ACLMessageContent;
 import org.janusproject.kernel.address.AgentAddress;
@@ -96,21 +94,27 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 			content.setPerformative(json.getInt("performative"));
 
 			// SENDER
-			content.setSender(AddressUtil.createAgentAddress(UUID
-					.fromString(json.getString("sender"))));
+			if (json.has("sender")) {
+				content.setSender(AddressUtil.createAgentAddress(UUID
+						.fromString(json.getString("sender"))));
+			}
 
 			// RECEIVERS
-			JSONArray json_receivers = json.getJSONArray("receiver");
-			Collection<AgentAddress> receivers = new ArrayList<AgentAddress>();
+			if (json.has("receiver")) {
+				JSONArray json_receivers = json.getJSONArray("receiver");
+				Collection<AgentAddress> receivers = new ArrayList<AgentAddress>();
 
-			for (int i = 0; i < json_receivers.length(); i++) {
-				receivers.add(AddressUtil.createAgentAddress(UUID
-						.fromString(json_receivers.getString(i))));
+				for (int i = 0; i < json_receivers.length(); i++) {
+					receivers.add(AddressUtil.createAgentAddress(UUID
+							.fromString(json_receivers.getString(i))));
+				}
+				content.setReceiver(receivers);
 			}
-			content.setReceiver(receivers);
 
 			// CONTENT
-			content.setContent(new StringBuffer(json.getString("content")));
+			if (json.has("content")) {
+				content.setContent(new StringBuffer(json.getString("content")));
+			}
 
 			// ENCODING
 			content.setEncoding(json.getString("encoding"));
