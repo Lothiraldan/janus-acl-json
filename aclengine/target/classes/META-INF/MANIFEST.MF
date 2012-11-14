@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1352888411213
+Build-Jdk: 1.6.0_35
+Built-By: picsoung
+Bundle-Description: Janus Multi-Agent Platform
+Bundle-DocURL: http://www.janus-project.org
+Bundle-License: http://www.janus-project.org/Licensing:Janus
+Bundle-ManifestVersion: 2
+Bundle-Name: ACL Engine
+Bundle-SymbolicName: org.janus-project.extras.modules.aclengine
+Bundle-Vendor: Janus Platform Consortium
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: *
+Export-Package: org.janusproject.acl;uses:="org.janusproject.kernel.addr
+ ess,org.janusproject.kernel.message,org.janusproject.acl.encoding,org.j
+ anusproject.kernel.mailbox,org.janusproject.kernel.agent,org.janusproje
+ ct.acl.protocol";version="1.0.0.SNAPSHOT",org.janusproject.acl.encoding
+ ;uses:="org.arakhne.vmutil.locale,org.janusproject.acl.exception,org.ja
+ nusproject.acl,org.janusproject.kernel.address,org.json,org.janusprojec
+ t.kernel.crio.core,org.janusproject.acl.protocol";version="1.0.0.SNAPSH
+ OT",org.janusproject.acl.exception;version="1.0.0.SNAPSHOT",org.januspr
+ oject.acl.protocol;uses:="org.arakhne.vmutil.locale,org.janusproject.ac
+ l.protocol.request,org.janusproject.kernel.address,org.janusproject.acl
+ ,org.janusproject.acl.protocol.cnp";version="1.0.0.SNAPSHOT",org.janusp
+ roject.acl.protocol.cnp;uses:="org.janusproject.acl.protocol,org.arakhn
+ e.vmutil.locale,org.janusproject.kernel.address,org.janusproject.acl";v
+ ersion="1.0.0.SNAPSHOT",org.janusproject.acl.protocol.propose;uses:="or
+ g.janusproject.acl.protocol";version="1.0.0.SNAPSHOT",org.janusproject.
+ acl.protocol.request;uses:="org.arakhne.vmutil.locale,org.janusproject.
+ kernel.address,org.janusproject.acl,org.janusproject.acl.protocol";vers
+ ion="1.0.0.SNAPSHOT"
+Import-Package: org.arakhne.vmutil.locale;version="[7.2,8)",org.januspro
+ ject.kernel.address,org.janusproject.kernel.agent,org.janusproject.kern
+ el.crio.core,org.janusproject.kernel.mailbox,org.janusproject.kernel.me
+ ssage,org.json
+Originally-Created-By: Maven Integration for Eclipse
+Tool: Bnd-1.50.0
