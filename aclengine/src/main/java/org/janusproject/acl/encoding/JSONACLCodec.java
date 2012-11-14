@@ -74,12 +74,13 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 			return null;
 		}
 
+		System.out.println(output.toString());
 		return output.toString().getBytes();
 	}
 
 	@Override
 	public ACLMessageContent decode(byte[] byteMsg, Object... parameters) {
-
+        System.out.println(new String(byteMsg));
 		ACLMessage.Content content = new ACLMessage.Content();
 
 		// Get charset parameter
