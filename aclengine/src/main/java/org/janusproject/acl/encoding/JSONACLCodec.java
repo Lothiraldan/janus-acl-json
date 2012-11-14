@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import org.janusproject.acl.ACLMessage;
 import org.janusproject.acl.ACLMessageContent;
-import org.janusproject.acl.Performative;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.crio.core.AddressUtil;
 import org.json.JSONArray;
