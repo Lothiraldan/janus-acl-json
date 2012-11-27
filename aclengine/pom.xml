@@ -78,9 +78,13 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20090211</version>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
+		
+		<dependency>
+		  <groupId>de.undercouch</groupId>
+		  <artifactId>bson4jackson</artifactId>
 		</dependency>
 	</dependencies>
 
