@@ -51,6 +51,10 @@ public enum ACLRepresentation {
 	 * 
 	 */
 	JSON("set.acl.rep.json.std"),
+	/*
+	 * 
+	 */
+	BSON("set.acl.rep.bson.std"),
 	/**
 	 * 
 	 */

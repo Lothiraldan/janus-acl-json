@@ -6,21 +6,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.janusproject.acl.ACLMessage;
-import org.janusproject.acl.ACLMessageContent;
-import org.janusproject.kernel.address.AgentAddress;
-import org.janusproject.kernel.crio.core.AddressUtil;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-
-import de.undercouch.bson4jackson.BsonFactory;
+import org.janusproject.acl.ACLMessage;
+import org.janusproject.acl.ACLMessageContent;
+import org.janusproject.kernel.address.AgentAddress;
+import org.janusproject.kernel.crio.core.AddressUtil;
+import org.janusproject.kernel.message.ByteMessage;
 
 public class JSONACLCodec implements ACLMessageContentEncodingService {
 
@@ -81,28 +79,9 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 
 	@Override
 	public ACLMessageContent decode(byte[] byteMsg, Object... parameters) {
-		System.out.println(new String(byteMsg));
 		ACLMessage.Content content = new ACLMessage.Content();
 
-		// Get charset parameter
-		String charset = PayloadEncoding.UTF8.getValue();
-		for (Object parameter : parameters) {
-			if (parameter instanceof PayloadEncoding) {
-				charset = ((PayloadEncoding) parameter).getValue();
-			}
-		}
-
-		// Try decoding with provided charset
-		String message;
-		try {
-			message = new String(byteMsg, charset);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		Map<String, Object> json = fromBytes(message);
-		;
+		Map<String, Object> json = fromBytes(byteMsg);
 
 		// PERFORMATIVE
 		content.setPerformative((Integer) json.get("performative"));
@@ -164,9 +143,13 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 
 		return content;
 	}
+	
+	protected ObjectMapper getMapper() {
+		return new ObjectMapper();
+	}
 
-	private byte[] fromMap(Map m) {
-		ObjectMapper mapper = new ObjectMapper();
+	private byte[] fromMap(Map<String, Object> m) {
+		ObjectMapper mapper = getMapper();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			mapper.writeValue(baos, m);
@@ -183,10 +166,10 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		return baos.toByteArray();
 	}
 
-	private Map<String, Object> fromBytes(String src) {
-		ObjectMapper mapper = new ObjectMapper();
+	private Map<String, Object> fromBytes(byte[] byteMsg) {
+		ObjectMapper mapper = getMapper();
 		try {
-			return mapper.readValue(src,
+			return mapper.readValue(byteMsg,
 					new TypeReference<Map<String, Object>>() {
 					});
 		} catch (JsonParseException e) {
