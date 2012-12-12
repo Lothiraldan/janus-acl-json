@@ -46,7 +46,7 @@ import org.janusproject.kernel.status.StatusFactory;
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$
  */
-public class ParticipantAgent extends ACLAgent {
+public class ParticipantAgent extends BaseAgent {
 
 
 	private static final long serialVersionUID = -8142804651824117538L;

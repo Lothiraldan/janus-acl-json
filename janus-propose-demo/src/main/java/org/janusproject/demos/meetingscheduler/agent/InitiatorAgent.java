@@ -48,7 +48,7 @@ import org.janusproject.kernel.util.sizediterator.SizedIterator;
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$
  */
-public class InitiatorAgent extends ACLAgent {
+public class InitiatorAgent extends BaseAgent {
 
 	private static final long serialVersionUID = -7078376398776599011L;
 

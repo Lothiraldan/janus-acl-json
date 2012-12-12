@@ -4,9 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.arakhne.vmutil.locale.Locale;
-import org.janusproject.demos.acl.request.Launcher;
-import org.janusproject.demos.acl.request.agent.ACLProtocolReceiver;
-import org.janusproject.demos.acl.request.agent.ACLProtocolSender;
+import org.janusproject.demos.meetingscheduler.Launcher;
 import org.janusproject.demos.meetingscheduler.agent.InitiatorAgent;
 import org.janusproject.demos.meetingscheduler.agent.ParticipantAgent;
 import org.janusproject.kernel.Kernel;
