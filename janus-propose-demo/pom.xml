@@ -115,6 +115,11 @@
 			<artifactId>org.apache.felix.main</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.arakhne.afc</groupId>
+			<artifactId>arakhneText</artifactId>
+		</dependency>
 
 
 	</dependencies>
