@@ -21,6 +21,9 @@ public class MeetingSchedulor {
 		this.mainFrame = new mainFrame();
 		this.mainFrame.setSchedulor(this);
 		this.mapping = new TreeMap<String, AgentFrame>();
+		calendarFrame cf = new calendarFrame();
+		cf.setVisible(true);
+		System.out.println("aaaa");
 	}
 	
 	public void start() {
