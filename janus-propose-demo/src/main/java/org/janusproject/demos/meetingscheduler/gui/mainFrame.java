@@ -21,6 +21,7 @@ public class mainFrame extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = 3830079646720453065L;
 	private ActionListener listener;
+	private MeetingSchedulor ms;
 
 	public mainFrame(){
 		Container contentPane = this.getContentPane();
@@ -64,7 +65,7 @@ public class mainFrame extends JFrame implements ActionListener{
 	}
 	
 	public void setSchedulor(MeetingSchedulor ms){
-		
+		this.ms = ms;
 	}
 
 	@Override
