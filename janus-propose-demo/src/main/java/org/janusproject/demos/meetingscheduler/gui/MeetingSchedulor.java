@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import org.janusproject.kernel.Kernel;
 
-public class MeetingSchedulor implements ActionListener {
+public class MeetingSchedulor {
 
 	private Kernel kernel;
 	private mainFrame mainFrame;
@@ -20,10 +20,10 @@ public class MeetingSchedulor implements ActionListener {
 		this.mainFrame.setVisible(true);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	public List<String> getAllAgents(){}
+	public void addAgent(String name){}
+	public void showAgentFrame(String){}
+	
 
 }

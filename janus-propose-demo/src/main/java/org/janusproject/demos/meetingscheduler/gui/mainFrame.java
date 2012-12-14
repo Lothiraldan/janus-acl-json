@@ -3,10 +3,7 @@ package org.janusproject.demos.meetingscheduler.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-<<<<<<< HEAD
-=======
 import java.awt.event.ActionEvent;
->>>>>>> 6d1060dd43bf341aa59ea00efd4b3bbab155dcf7
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -65,9 +62,9 @@ public class mainFrame extends JFrame implements ActionListener{
 		this.add(addParticipantButton);
 		this.add(scrollPane);
 	}
-
-	public void setEventListener(ActionListener listener) {
-		this.listener = listener;
+	
+	public void setSchedulor(MeetingSchedulor ms){
+		
 	}
 
 	@Override
@@ -76,6 +73,7 @@ public class mainFrame extends JFrame implements ActionListener{
 		System.out.println("ahaha");
 		if (cmd == "ADDPARTICIPANT") {
 		     System.out.println(addParticipantPrompt());
+		     
 		} else if (cmd == "CANCEL") {
 		     System.out.println("jjiji");
 		}
