@@ -5,8 +5,15 @@ import java.awt.Container;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
+import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
+
 public class calendarFrame extends JFrame{
-	public calendarFrame(){
+	
+	BaseAgent agent;
+	
+	public calendarFrame(BaseAgent agent){
+		this.agent = agent;
+		
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, getDefaultCloseOperation()));
 		this.setSize(400,500);
