@@ -9,6 +9,7 @@ import org.janusproject.acl.protocol.ProtocolResult;
 import org.janusproject.acl.protocol.ProtocolState;
 import org.janusproject.acl.protocol.propose.FipaProposeProtocol;
 import org.janusproject.acl.protocol.request.FipaRequestProtocol;
+import org.janusproject.demos.meetingscheduler.util.SerializationUtil;
 import org.janusproject.kernel.crio.core.Role;
 import org.janusproject.kernel.status.Status;
 import org.janusproject.kernel.status.StatusFactory;
@@ -51,9 +52,11 @@ public class Initiator extends Role{
 			case SENDING_REQUEST: 
 			{	
 				//requestProtocol.request( "evil" );
-				this.proposeProtocol.propose(Locale.getString("REQUEST")); //$NON-NLS-1$
+				//this.proposeProtocol.propose(SerializationUtil.encode(Meeting)); //$NON-NLS-1$
 				
 				//requestProtocol.cancel("@++");
+				//broadcastMessage(Participant.class, this.proposeProtocol.propose(SerializationUtil.encode(Meeting)));
+
 				
 				log(Locale.getString("REQUESTSENT")); //$NON-NLS-1$
 				
