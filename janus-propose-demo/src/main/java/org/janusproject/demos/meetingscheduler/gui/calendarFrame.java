@@ -1,16 +1,21 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
+import javax.swing.text.TableView.TableCell;
 
 public class calendarFrame extends JFrame{
 	/**
@@ -63,10 +68,32 @@ public class calendarFrame extends JFrame{
 	
 	class ColorTableModel extends AbstractTableModel {
 
-		  Object rowData[][] = { { "1", Boolean.TRUE }, { "2", Boolean.TRUE }, { "3", Boolean.FALSE },
-		      { "4", Boolean.TRUE }, { "5", Boolean.FALSE }, };
+//		  Object rowData[][] = { { "1", Boolean.TRUE }, { "2", Boolean.TRUE }, { "3", Boolean.FALSE },
+//		      { "4", Boolean.TRUE }, { "5", Boolean.FALSE }, };
+//		  
+		  Object rowData[][] = {
+				    {"7-8", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,"kiki"},
+				    {"8-9", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"9-10", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"10-11", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"11-12", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"12-13", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"13-14", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"14-15", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"15-16", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"16-17", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"17-18", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"18-19", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				    {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+				};
 
-		  String columnNames[] = { "English", "Boolean" };
+		  String[] columnNames = {"Horaires","Lundi",
+	                "Mardi",
+	                "Mercredi",
+	                "Jeudi",
+	                "Vendredi",
+	                "Samedi",
+	                "Dimanche"};
 
 		  public int getColumnCount() {
 		    return columnNames.length;
