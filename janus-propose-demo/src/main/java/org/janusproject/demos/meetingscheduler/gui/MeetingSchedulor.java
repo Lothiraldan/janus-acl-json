@@ -15,9 +15,12 @@ public class MeetingSchedulor {
 	private Kernel kernel;
 	private mainFrame mainFrame;
 	private Map<String, AgentFrame> mapping;
+	private AgentAddress kernelAgentAddress;
 
 	public MeetingSchedulor(Kernel kernel) {
 		this.kernel = kernel;
+		this.kernel.launchDifferedExecutionAgents();
+		this.kernelAgentAddress = this.kernel.getAgents().next();
 		this.mainFrame = new mainFrame();
 		this.mainFrame.setSchedulor(this);
 		this.mapping = new TreeMap<String, AgentFrame>();
@@ -32,9 +35,11 @@ public class MeetingSchedulor {
 		List<String> agents = new ArrayList<String>();
 		for (SizedIterator<AgentAddress> iterator = this.kernel.getAgents(); iterator.hasNext();) {
 			AgentAddress aagent = iterator.next();
-			agents.add(aagent.getName());
+			if(!aagent.equals(this.kernelAgentAddress)) {
+				agents.add(aagent.getName());
+			}
 		}
-		return agents;		
+		return agents;
 	}
 	
 	public void addAgent(String name){
