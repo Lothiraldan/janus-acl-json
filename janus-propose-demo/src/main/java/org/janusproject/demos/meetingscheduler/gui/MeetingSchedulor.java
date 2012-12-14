@@ -51,7 +51,7 @@ public class MeetingSchedulor {
 	}
 	
 	public void showAgentFrame(String name){
-		
+		this.mapping.get(name).setVisible(true);
 	}
 	
 
