@@ -14,7 +14,7 @@ public class MeetingSchedulor {
 
 	private Kernel kernel;
 	private mainFrame mainFrame;
-	private Map<String, AgentFrame> mapping;
+	private Map<String, calendarFrame> mapping;
 	private AgentAddress kernelAgentAddress;
 
 	public MeetingSchedulor(Kernel kernel) {
@@ -23,10 +23,7 @@ public class MeetingSchedulor {
 		this.kernelAgentAddress = this.kernel.getAgents().next();
 		this.mainFrame = new mainFrame();
 		this.mainFrame.setSchedulor(this);
-		this.mapping = new TreeMap<String, AgentFrame>();
-		calendarFrame cf = new calendarFrame();
-		cf.setVisible(true);
-		System.out.println("aaaa");
+		this.mapping = new TreeMap<String, calendarFrame>();
 	}
 	
 	public void start() {
@@ -49,7 +46,7 @@ public class MeetingSchedulor {
 		BaseAgent agent = new BaseAgent();
 		this.kernel.submitLightAgent(agent, name);
 		this.kernel.launchDifferedExecutionAgents();
-		AgentFrame aframe = new AgentFrame(agent);
+		calendarFrame aframe = new calendarFrame(agent);
 		mapping.put(name, aframe);
 	}
 	

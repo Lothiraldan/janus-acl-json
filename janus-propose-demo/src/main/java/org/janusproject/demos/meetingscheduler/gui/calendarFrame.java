@@ -17,13 +17,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.text.TableView.TableCell;
 
-public class calendarFrame extends JFrame{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6091451186812076790L;
+import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
 
-	public calendarFrame(){
+public class calendarFrame extends JFrame{
+	
+	BaseAgent agent;
+
+/**
+ * 
+ */
+private static final long serialVersionUID = -6091451186812076790L;
+	
+	public calendarFrame(BaseAgent agent){
+		this.agent = agent;
+
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, getDefaultCloseOperation()));
 		this.setSize(500,600);
