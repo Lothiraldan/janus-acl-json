@@ -22,7 +22,6 @@ public class mainFrame extends JFrame implements ActionListener,
 
 	private static final long serialVersionUID = 3830079646720453065L;
 	private ActionListener listener;
-	private MeetingSchedulor ms;
 
 	private JList agentNameList;
 
@@ -53,15 +52,11 @@ public class mainFrame extends JFrame implements ActionListener,
 		this.add(scrollPane);
 	}
 
-	public void setSchedulor(MeetingSchedulor ms) {
-		this.ms = ms;
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "ADDPARTICIPANT") {
-			this.ms.addAgent(addParticipantPrompt());
+			MeetingSchedulor.getInstance().addAgent(addParticipantPrompt());
 			updateList();
 
 		} else if (cmd == "CANCEL") {
@@ -78,7 +73,7 @@ public class mainFrame extends JFrame implements ActionListener,
 	public void updateList() {
 		agentNameList.removeAll();
 		DefaultListModel dlm = new DefaultListModel();
-		for (String elem : this.ms.getAllAgents()) {
+		for (String elem : MeetingSchedulor.getInstance().getAllAgents()) {
 			dlm.addElement(elem);
 		}
 		agentNameList.setModel(dlm);
@@ -91,7 +86,7 @@ public class mainFrame extends JFrame implements ActionListener,
 		Object selectionValues[] = list.getSelectedValues();
 		for (int i = 0, n = selections.length; i < n; i++) {
 			System.out.println((String)selectionValues[i]);
-			this.ms.showAgentFrame((String)selectionValues[i]);
+			MeetingSchedulor.getInstance().showAgentFrame((String)selectionValues[i]);
 		}
 	}
 

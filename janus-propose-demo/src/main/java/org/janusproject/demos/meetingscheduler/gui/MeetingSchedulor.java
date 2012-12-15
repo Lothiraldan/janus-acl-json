@@ -11,19 +11,29 @@ import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
 
 public class MeetingSchedulor {
-
-	private Kernel kernel;
+	
+	private static Kernel kernel;
+	private static MeetingSchedulor instance;
 	private mainFrame mainFrame;
 	private Map<String, calendarFrame> mapping;
 	private AgentAddress kernelAgentAddress;
 
-	public MeetingSchedulor(Kernel kernel) {
-		this.kernel = kernel;
-		this.kernel.launchDifferedExecutionAgents();
-		this.kernelAgentAddress = this.kernel.getAgents().next();
+	private MeetingSchedulor() {
+		MeetingSchedulor.kernel.launchDifferedExecutionAgents();
+		this.kernelAgentAddress = MeetingSchedulor.kernel.getAgents().next();
 		this.mainFrame = new mainFrame();
-		this.mainFrame.setSchedulor(this);
 		this.mapping = new TreeMap<String, calendarFrame>();
+	}
+	
+	public static MeetingSchedulor getInstance() {
+		if(instance == null) {
+			instance = new MeetingSchedulor();
+		}
+		return instance;
+	}
+	
+	public static void setKernel(Kernel k) {
+		kernel = k;
 	}
 	
 	public void start() {
