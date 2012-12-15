@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,7 +33,7 @@ public class calendarFrame extends JFrame implements ActionListener{
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane,
 				getDefaultCloseOperation()));
-		this.setSize(500, 600);
+		this.setSize(500, 300);
 		this.setLocation(200, 200);
 
 		String[] columnNames = { "Horaires", "Lundi", "Mardi", "Mercredi",
@@ -74,7 +75,13 @@ public class calendarFrame extends JFrame implements ActionListener{
 		TableModel model = new ColorTableModel(this.calendar);
 		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
+		
+		JButton newmeetingButton = new JButton("New Meeting");
+		newmeetingButton.setActionCommand("NEWMEETING");
+	 	newmeetingButton.addActionListener(this);
+	 	
 		panel.add(descLabel, BorderLayout.NORTH);
+		panel.add(newmeetingButton,BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.add(panel);
 	}
@@ -163,4 +170,5 @@ public class calendarFrame extends JFrame implements ActionListener{
 			initmeetingFrame.setVisible(true);
 		}		
 	}
+	
 }
