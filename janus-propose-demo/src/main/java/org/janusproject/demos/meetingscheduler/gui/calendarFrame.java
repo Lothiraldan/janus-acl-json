@@ -128,7 +128,7 @@ private static final long serialVersionUID = -6091451186812076790L;
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "NEWMEETING") {
-			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame();
+			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(this.agent.calendar);
 			initmeetingFrame.setVisible(true);
 		}
 	}
