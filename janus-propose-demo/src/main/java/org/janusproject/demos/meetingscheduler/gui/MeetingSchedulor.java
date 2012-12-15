@@ -56,7 +56,7 @@ public class MeetingSchedulor {
 		BaseAgent agent = new BaseAgent();
 		this.kernel.submitLightAgent(agent, name);
 		this.kernel.launchDifferedExecutionAgents();
-		calendarFrame aframe = new calendarFrame(agent);
+		calendarFrame aframe = new calendarFrame(agent.calendar, name);
 		aframe.setVisible(true);
 		mapping.put(name, aframe);
 	}

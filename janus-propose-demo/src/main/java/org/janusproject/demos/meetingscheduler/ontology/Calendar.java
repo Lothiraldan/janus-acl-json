@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendar {
-	public List<List<Object>> busy = new ArrayList<List<Object>>();
+	private List<List<Object>> busy = new ArrayList<List<Object>>();
 	
 	public Calendar() {
 		super();
@@ -19,6 +19,18 @@ public class Calendar {
 
 	public void setBusy(int day, int hour, Object reason) {
 		busy.get(day).set(hour, reason);
+	}
+	
+	public Object get(int row, int column) {
+		return busy.get(row).get(column);
+	}
+	
+	public void set(int row, int column, Object value) {
+		busy.get(row).set(column, value);
+	}
+	
+	public int row_size() {
+		return busy.size();
 	}
 	
 	
