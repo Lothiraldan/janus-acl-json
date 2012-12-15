@@ -10,7 +10,7 @@ public class BaseAgent extends ACLAgent {
 	 */
 	private static final long serialVersionUID = -8082340632710800159L;
 	
-	private Calendar calendar;
+	public Calendar calendar;
 
 	public BaseAgent() {
 		super();

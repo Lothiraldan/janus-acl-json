@@ -1,9 +1,25 @@
 package org.janusproject.demos.meetingscheduler.ontology;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Calendar {
-	public List<Date> busy = new ArrayList<Date>();
+	public List<List<String>> busy = new ArrayList<List<String>>();
+	
+	public Calendar() {
+		super();
+		for(int i = 0; i < 6; i++) {
+			List<String> row = new ArrayList<String>();
+			for(int j = 0; j < 13; j++) {
+				row.set(j, null);
+			}
+			busy.set(i, row);
+		}
+	}
+
+	public void setBusy(int day, int hour, String reason) {
+		busy.get(day).set(hour, reason);
+	}
+	
+	
 }

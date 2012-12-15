@@ -1,7 +1,5 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
-import javax.swing.JFrame;
-
 import org.janusproject.kernel.agent.Kernels;
 
 public class Launcher {
