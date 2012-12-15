@@ -20,7 +20,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 234360639496126275L;
 	
-	public initiateMeetingFrame(Calendar calendar){
+	public initiateMeetingFrame(Calendar calendar, String name){
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, getDefaultCloseOperation()));
 		this.setSize(500,300);

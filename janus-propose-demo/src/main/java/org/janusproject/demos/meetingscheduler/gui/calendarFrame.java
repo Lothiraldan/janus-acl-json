@@ -36,36 +36,6 @@ public class calendarFrame extends JFrame implements ActionListener{
 		this.setSize(500, 300);
 		this.setLocation(200, 200);
 
-		String[] columnNames = { "Horaires", "Lundi", "Mardi", "Mercredi",
-				"Jeudi", "Vendredi", "Samedi", "Dimanche" };
-		Object[][] data = {
-				{ "7-8", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "8-9", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "9-10", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "10-11", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "11-12", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "12-13", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "13-14", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "14-15", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "15-16", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "16-17", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "17-18", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "18-19", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" },
-				{ "19-20", Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
-						Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, "" }, };
-
 		// JTable calendarTable = new JTable(data, columnNames);
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -91,7 +61,7 @@ public class calendarFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd == "NEWMEETING") {
-			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(this.calendar);
+			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(this.calendar, name);
 			initmeetingFrame.setVisible(true);
 		}		
 	}
