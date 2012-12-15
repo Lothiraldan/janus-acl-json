@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calendar {
-	public List<List<String>> busy = new ArrayList<List<String>>();
+	public List<List<Object>> busy = new ArrayList<List<Object>>();
 	
 	public Calendar() {
 		super();
-		for(int i = 0; i < 6; i++) {
-			List<String> row = new ArrayList<String>();
-			for(int j = 0; j < 13; j++) {
-				row.add(null);
+		for(int i = 0; i < 13; i++) {
+			List<Object> row = new ArrayList<Object>();
+			for(int j = 0; j < 7; j++) {
+				row.add(Boolean.FALSE);
 			}
 			busy.add(row);
 		}
 	}
 
-	public void setBusy(int day, int hour, String reason) {
+	public void setBusy(int day, int hour, Object reason) {
 		busy.get(day).set(hour, reason);
 	}
 	

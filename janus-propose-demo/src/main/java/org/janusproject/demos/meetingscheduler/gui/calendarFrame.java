@@ -18,6 +18,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.TableView.TableCell;
 
 import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
+import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
 public class calendarFrame extends JFrame{
 	
@@ -59,13 +60,13 @@ private static final long serialVersionUID = -6091451186812076790L;
 			    {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
 			};
 		
-		JTable calendarTable = new JTable(data, columnNames);
+//		JTable calendarTable = new JTable(data, columnNames);
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
-		JLabel descLabel = new JLabel("Schedule off [AGENT_NAME]");
+		JLabel descLabel = new JLabel("Schedule of "+this.agent.getName());
 		
-		TableModel model = new ColorTableModel();
+		TableModel model = new ColorTableModel(this.agent.calendar);
 	    JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		panel.add(descLabel,BorderLayout.NORTH);
@@ -77,22 +78,22 @@ private static final long serialVersionUID = -6091451186812076790L;
 
 //		  Object rowData[][] = { { "1", Boolean.TRUE }, { "2", Boolean.TRUE }, { "3", Boolean.FALSE },
 //		      { "4", Boolean.TRUE }, { "5", Boolean.FALSE }, };
-//		  
-		  Object rowData[][] = {
-				    {"7-8", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,"kiki"},
-				    {"8-9", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"9-10", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"10-11", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"11-12", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"12-13", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"13-14", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"14-15", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"15-16", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"16-17", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"17-18", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"18-19", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				    {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-				};
+//		 
+//		  Object rowData[][] = {
+//				    {"7-8", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,"kiki"},
+//				    {"8-9", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"9-10", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"10-11", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"11-12", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"12-13", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"13-14", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"14-15", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"15-16", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"16-17", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"17-18", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"18-19", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				    {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
+//				};
 
 		  String[] columnNames = {"Horaires","Lundi",
 	                "Mardi",
@@ -101,6 +102,12 @@ private static final long serialVersionUID = -6091451186812076790L;
 	                "Vendredi",
 	                "Samedi",
 	                "Dimanche"};
+
+		private Calendar c;
+		  
+		  ColorTableModel(Calendar c){
+			  this.c = c;
+		  }
 
 		  public int getColumnCount() {
 		    return columnNames.length;
@@ -111,11 +118,14 @@ private static final long serialVersionUID = -6091451186812076790L;
 		  }
 
 		  public int getRowCount() {
-		    return rowData.length;
+		    return this.c.busy.size();
 		  }
 
 		  public Object getValueAt(int row, int column) {
-		    return rowData[row][column];
+			  if(column==0){
+				  return String.format("%s-%s", row+7,row+8);
+			  }
+		    return this.c.busy.get(row).get(column-1);
 		  }
 
 		  public Class getColumnClass(int column) {
@@ -123,7 +133,7 @@ private static final long serialVersionUID = -6091451186812076790L;
 		  }
 
 		  public void setValueAt(Object value, int row, int column) {
-		    rowData[row][column] = value;
+		    this.c.busy.get(row).set(column-1,value);
 		  }
 
 		  public boolean isCellEditable(int row, int column) {
