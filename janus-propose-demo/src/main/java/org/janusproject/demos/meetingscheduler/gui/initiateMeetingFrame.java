@@ -29,7 +29,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		String[] data = {"one", "two", "three", "four"};
-		JList participantList = new JList(data);
+		JList participantList = new JList(calendar));
 		JScrollPane scrollPane = new JScrollPane(participantList);
 		
 		JButton sendProposalButton = new JButton("Send meeting proposal");

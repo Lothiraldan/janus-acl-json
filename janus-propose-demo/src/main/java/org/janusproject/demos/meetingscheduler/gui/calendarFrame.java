@@ -72,7 +72,7 @@ public class calendarFrame extends JFrame implements ActionListener{
 
 		JLabel descLabel = new JLabel("Schedule of " + this.name);
 
-		TableModel model = new ColorTableModel(this.calendar);
+		myTableModel model = new myTableModel(this.calendar);
 		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		
@@ -86,81 +86,6 @@ public class calendarFrame extends JFrame implements ActionListener{
 		this.add(panel);
 	}
 
-	class ColorTableModel extends AbstractTableModel {
-
-		// Object rowData[][] = { { "1", Boolean.TRUE }, { "2", Boolean.TRUE },
-		// { "3", Boolean.FALSE },
-		// { "4", Boolean.TRUE }, { "5", Boolean.FALSE }, };
-		//
-		// Object rowData[][] = {
-		// {"7-8", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,"kiki"},
-		// {"8-9", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"9-10", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"10-11", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"11-12", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"12-13", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"13-14", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"14-15", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"15-16", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"16-17", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"17-18", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"18-19", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE,
-		// Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-		// };
-
-		String[] columnNames = { "Horaires", "Lundi", "Mardi", "Mercredi",
-				"Jeudi", "Vendredi", "Samedi", "Dimanche" };
-
-		private Calendar c;
-
-		ColorTableModel(Calendar c) {
-			this.c = c;
-		}
-
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		public String getColumnName(int column) {
-			return columnNames[column];
-		}
-
-		public int getRowCount() {
-			return this.c.row_size();
-		}
-
-		public Object getValueAt(int row, int column) {
-			if (column == 0) {
-				return String.format("%s-%s", row + 7, row + 8);
-			}
-			return this.c.get(row, column - 1);
-		}
-
-		public Class getColumnClass(int column) {
-			return (getValueAt(0, column).getClass());
-		}
-
-		public void setValueAt(Object value, int row, int column) {
-			this.c.set(row, column - 1, value);
-		}
-
-		public boolean isCellEditable(int row, int column) {
-			return (column != 0);
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
