@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
@@ -29,12 +30,16 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		String[] data = {"one", "two", "three", "four"};
-		JList participantList = new JList(calendar));
+		JList participantList = new JList(MeetingSchedulor.getInstance().getAllAgents().toArray());
 		JScrollPane scrollPane = new JScrollPane(participantList);
 		
 		JButton sendProposalButton = new JButton("Send meeting proposal");
 		sendProposalButton.setActionCommand("SENDMEETING");
 		sendProposalButton.addActionListener(this);
+		
+		myTableModel model = new myTableModel(this.calendar);
+		JTable table = new JTable(model);
+		JScrollPane scrollPane = new JScrollPane(table);
 		
 		panel.add(scrollPane,BorderLayout.EAST);
 		
