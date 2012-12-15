@@ -44,12 +44,6 @@ public class mainFrame extends JFrame implements ActionListener,
 		agentNameList.setSize(400, 200);
 		agentNameList.addListSelectionListener(this);
 
-		agentNameList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				System.out.println(agentNameList);
-			}
-		});
-
 		JScrollPane scrollPane = new JScrollPane(agentNameList);
 
 		// this.pack();
@@ -96,6 +90,7 @@ public class mainFrame extends JFrame implements ActionListener,
 		int selections[] = list.getSelectedIndices();
 		Object selectionValues[] = list.getSelectedValues();
 		for (int i = 0, n = selections.length; i < n; i++) {
+			System.out.println((String)selectionValues[i]);
 			this.ms.showAgentFrame((String)selectionValues[i]);
 		}
 	}
