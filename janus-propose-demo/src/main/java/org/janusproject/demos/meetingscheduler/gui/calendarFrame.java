@@ -1,25 +1,19 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
-import javax.swing.text.TableView.TableCell;
 
-import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
 public class calendarFrame extends JFrame implements ActionListener{

@@ -2,6 +2,8 @@ package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -13,7 +15,7 @@ import javax.swing.JScrollPane;
 
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
-public class initiateMeetingFrame extends JFrame implements ActionListener{
+public class initiateMeetingFrame extends JFrame implements ActionListener {
 	private MeetingSchedulor ms;
 	
 	private static final long serialVersionUID = 234360639496126275L;
@@ -37,6 +39,12 @@ public class initiateMeetingFrame extends JFrame implements ActionListener{
 		panel.add(scrollPane,BorderLayout.EAST);
 		
 		this.add(panel);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
