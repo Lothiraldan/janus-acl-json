@@ -61,16 +61,16 @@ public class mainFrame extends JFrame implements ActionListener,
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "ADDPARTICIPANT") {
-			this.ms.addAgent(addParticipantPrompt());
-			updateList();
-
-		} else if (cmd == "CANCEL") {
-			System.out.println("jjiji");
+			String agent_name = addParticipantPrompt();
+			if(agent_name!=null){
+				this.ms.addAgent(agent_name);
+				updateList();
+			}
 		}
 	}
 
 	public String addParticipantPrompt() {
-		JFrame frame = new JFrame("InputDialog Example #1");
+		JFrame frame = new JFrame("Add Participant Dialog");
 		String name = JOptionPane.showInputDialog(frame, "What's your name?");
 		return name;
 	}

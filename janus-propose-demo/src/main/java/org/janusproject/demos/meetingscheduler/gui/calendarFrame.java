@@ -3,6 +3,8 @@ package org.janusproject.demos.meetingscheduler.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,13 +22,9 @@ import javax.swing.text.TableView.TableCell;
 import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
-public class calendarFrame extends JFrame{
+public class calendarFrame extends JFrame implements ActionListener{
 	
 	BaseAgent agent;
-
-/**
- * 
- */
 private static final long serialVersionUID = -6091451186812076790L;
 	
 	public calendarFrame(BaseAgent agent){
@@ -34,42 +32,24 @@ private static final long serialVersionUID = -6091451186812076790L;
 
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane, getDefaultCloseOperation()));
-		this.setSize(500,600);
+		this.setSize(500,300);
 		this.setLocation(200,200);
 		
-		String[] columnNames = {"Horaires","Lundi",
-                "Mardi",
-                "Mercredi",
-                "Jeudi",
-                "Vendredi",
-                "Samedi",
-                "Dimanche"};
-		Object[][] data = {
-			    {"7-8", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"8-9", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"9-10", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"10-11", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"11-12", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"12-13", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"13-14", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"14-15", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"15-16", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"16-17", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"17-18", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"18-19", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			    {"19-20", Boolean.FALSE,Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,Boolean.FALSE,Boolean.FALSE,""},
-			};
-		
-//		JTable calendarTable = new JTable(data, columnNames);
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
 		JLabel descLabel = new JLabel("Schedule of "+this.agent.getName());
 		
+		JButton newmeetingButton = new JButton("New Meeting");
+		newmeetingButton.setActionCommand("NEWMEETING");
+		newmeetingButton.addActionListener(this);
+		
 		TableModel model = new ColorTableModel(this.agent.calendar);
 	    JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
+		
 		panel.add(descLabel,BorderLayout.NORTH);
+		panel.add(newmeetingButton,BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.add(panel);
 	}
@@ -125,6 +105,9 @@ private static final long serialVersionUID = -6091451186812076790L;
 			  if(column==0){
 				  return String.format("%s-%s", row+7,row+8);
 			  }
+			  if(this.c.busy.get(row).get(column-1)==Boolean.TRUE){
+				  System.out.println("true");
+			  }
 		    return this.c.busy.get(row).get(column-1);
 		  }
 
@@ -140,4 +123,13 @@ private static final long serialVersionUID = -6091451186812076790L;
 		    return (column != 0);
 		  }
 		}
+
+	@Override
+	public void actionPerformed(ActionEvent evt) {
+		String cmd = evt.getActionCommand();
+		if (cmd == "NEWMEETING") {
+			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame();
+			initmeetingFrame.setVisible(true);
+		}
+	}
 }
