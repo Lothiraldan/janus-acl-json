@@ -10,6 +10,8 @@ public class Launcher {
 	public static void main(String[] args) {
 		MeetingSchedulor.setKernel(Kernels.get());
 		MeetingSchedulor.getInstance().start();
+		meetingProposalFrame m = new meetingProposalFrame();
+		m.setVisible(true);
 	}
 
 }
