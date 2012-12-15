@@ -19,9 +19,6 @@ import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
 public class calendarFrame extends JFrame implements ActionListener{
 
-	/**
- * 
- */
 	private static final long serialVersionUID = -6091451186812076790L;
 	private Calendar calendar;
 	private String name;

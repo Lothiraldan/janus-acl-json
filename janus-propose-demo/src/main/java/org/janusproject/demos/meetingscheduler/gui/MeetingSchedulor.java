@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
+import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
@@ -76,5 +77,8 @@ public class MeetingSchedulor {
 		this.mapping.get(name).setVisible(true);
 	}
 	
+	public void createMeeting(String initiator_name, List<String> participants, Calendar cal){
+//		Meeting meeting = new Meeting()
+	}
 
 }

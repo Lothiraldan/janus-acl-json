@@ -15,7 +15,7 @@ class myTableModel extends AbstractTableModel {
 	String[] columnNames = { "Horaires", "Lundi", "Mardi", "Mercredi",
 			"Jeudi", "Vendredi", "Samedi", "Dimanche" };
 
-	private Calendar c;
+	protected Calendar c;
 
 	public myTableModel(Calendar c) {
 		this.c = c;
