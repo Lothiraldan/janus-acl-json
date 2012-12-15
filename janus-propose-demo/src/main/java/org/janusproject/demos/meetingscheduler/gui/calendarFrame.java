@@ -3,6 +3,8 @@ package org.janusproject.demos.meetingscheduler.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,7 +22,7 @@ import javax.swing.text.TableView.TableCell;
 import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
-public class calendarFrame extends JFrame {
+public class calendarFrame extends JFrame implements ActionListener{
 
 	/**
  * 
@@ -157,5 +159,14 @@ public class calendarFrame extends JFrame {
 		public boolean isCellEditable(int row, int column) {
 			return (column != 0);
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String cmd = e.getActionCommand();
+		if (cmd == "NEWMEETING") {
+			initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(this.calendar);
+			initmeetingFrame.setVisible(true);
+		}		
 	}
 }
