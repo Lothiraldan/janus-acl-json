@@ -58,7 +58,7 @@ public class mainFrame extends JFrame implements ActionListener,
 		if (cmd == "ADDPARTICIPANT") {
 			String agent_name = addParticipantPrompt();
 			if(agent_name!=null){
-				MeetingSchedulor.getInstance().addAgent(addParticipantPrompt());
+				MeetingSchedulor.getInstance().addAgent(agent_name);
 				updateList();
 			}
 		}
