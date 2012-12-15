@@ -11,9 +11,9 @@ public class Calendar {
 		for(int i = 0; i < 6; i++) {
 			List<String> row = new ArrayList<String>();
 			for(int j = 0; j < 13; j++) {
-				row.set(j, null);
+				row.add(null);
 			}
-			busy.set(i, row);
+			busy.add(row);
 		}
 	}
 
