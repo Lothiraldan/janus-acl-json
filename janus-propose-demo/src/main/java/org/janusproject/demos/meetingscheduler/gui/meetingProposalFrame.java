@@ -15,39 +15,45 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 
-public class meetingProposalFrame extends JFrame implements ActionListener{
+public class meetingProposalFrame extends JFrame implements ActionListener {
 	private JTable propList;
-	public meetingProposalFrame(){
-		String[][] propositions = { {"Monday 7-8",""},{ "Tuesday 14-15",""},{ "Wednesday 17-18",""},{ "Wednesday 18-19",""},{  "Friday 10-11"}};
+
+	public meetingProposalFrame() {
+		String[][] propositions = { { "Monday 7-8", "" },
+				{ "Tuesday 14-15", "" }, { "Wednesday 17-18", "" },
+				{ "Wednesday 18-19", "" }, { "Friday 10-11" } };
 		Container contentPane = this.getContentPane();
-		contentPane.setLayout(new BoxLayout(contentPane, getDefaultCloseOperation()));
-		this.setSize(500,300);
-		this.setLocation(300,400);
-		
+		contentPane.setLayout(new BoxLayout(contentPane,
+				getDefaultCloseOperation()));
+		this.setSize(500, 300);
+		this.setLocation(300, 400);
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		String columnNames[] = { "Time Slot", "Rank" };
-		propList = new JTable(propositions,columnNames);
-		
+		propList = new JTable(propositions, columnNames);
+
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
 		submitButton.addActionListener(this);
-		
-		JLabel descLabel = new JLabel("Rate your prefered proposition (1 is the best)");
-		
+
+		JLabel descLabel = new JLabel(
+				"Rate your prefered proposition (1 is the best)");
+
 		JScrollPane scrollPane = new JScrollPane(propList);
 		panel.add(descLabel, BorderLayout.NORTH);
-		panel.add(submitButton,BorderLayout.SOUTH);
+		panel.add(submitButton, BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.add(panel);
-	    this.setVisible(true);
+		this.setVisible(true);
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "SUBMIT") {
-			
+
 		}
-		
+
 	}
 }

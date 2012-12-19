@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import org.janusproject.demos.meetingscheduler.agent.BaseAgent;
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
+import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
@@ -78,6 +80,8 @@ public class MeetingSchedulor {
 	}
 	
 	public void createMeeting(String initiator_name, List<String> participants, Calendar cal){
+		Meeting meeting = new Meeting(cal);
+		Logger.getAnonymousLogger().info("Here ?");
 //		Meeting meeting = new Meeting()
 	}
 
