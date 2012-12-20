@@ -1,65 +1,50 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
-import com.miginfocom.ashape.AShapeUtil;
-import com.miginfocom.ashape.Visibility;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyVetoException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Random;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolTip;
+import javax.swing.SwingUtilities;
+
+import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
+
 import com.miginfocom.ashape.interaction.InteractionEvent;
 import com.miginfocom.ashape.interaction.InteractionListener;
-import com.miginfocom.ashape.interaction.MouseKeyInteractor;
-import com.miginfocom.ashape.interaction.OverrideFilter;
-import com.miginfocom.ashape.shapes.AShape;
-import com.miginfocom.ashape.shapes.DrawAShape;
-import com.miginfocom.ashape.shapes.FillAShape;
-import com.miginfocom.ashape.shapes.TextAShape;
 import com.miginfocom.beans.ActivityGridLayoutBean;
-import com.miginfocom.beans.CategoryTreeBean;
 import com.miginfocom.beans.DateAreaBean;
 import com.miginfocom.calendar.activity.Activity;
 import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityInteractor;
 import com.miginfocom.calendar.activity.DefaultActivity;
-import com.miginfocom.calendar.activity.recurrence.ByXXXRuleData;
-import com.miginfocom.calendar.activity.recurrence.RecurrenceRule;
 import com.miginfocom.calendar.activity.view.ActivityView;
-import com.miginfocom.calendar.category.*;
-import com.miginfocom.calendar.datearea.ActivityMoveEvent;
-import com.miginfocom.calendar.datearea.ActivityMoveListener;
 import com.miginfocom.calendar.datearea.DefaultDateArea;
 import com.miginfocom.calendar.decorators.GridCellRangeDecorator;
 import com.miginfocom.calendar.grid.Grid;
-import com.miginfocom.calendar.grid.GridRow;
-import com.miginfocom.util.ActivityHelper;
 import com.miginfocom.util.LicenseValidator;
 import com.miginfocom.util.MigUtil;
-import com.miginfocom.util.dates.*;
-import com.miginfocom.util.filter.AndFilter;
-import com.miginfocom.util.filter.Filter;
-import com.miginfocom.util.gfx.GfxUtil;
-import com.miginfocom.util.gfx.ShapeGradientPaint;
+import com.miginfocom.util.dates.DateChangeEvent;
+import com.miginfocom.util.dates.DateRange;
+import com.miginfocom.util.dates.DateRangeI;
+import com.miginfocom.util.dates.MutableDateRange;
+import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
-import com.miginfocom.util.gfx.geometry.PlaceRect;
 import com.miginfocom.util.gfx.geometry.numbers.AtEnd;
-import com.miginfocom.util.gfx.geometry.numbers.AtFraction;
 import com.miginfocom.util.gfx.geometry.numbers.AtStart;
 import com.miginfocom.util.states.GenericStates;
-import com.miginfocom.util.states.StatesI;
 import com.miginfocom.util.states.ToolTipProvider;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicTreeUI;
-
-import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.beans.PropertyVetoException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Random;
 
 /**
  * A demo of how to create a calendar that looks like iCal on the Mac.
@@ -114,11 +99,6 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 
 	private void configureComponents() {
 		currentDateArea = dayDateArea;
-
-		// Add the left square that shows the category color
-		activityMonthAShape.addSubShape(createRecurrenceShape());
-		activityDayAShape.addSubShape(createRecurrenceShape());
-		activityDayAShape.addSubShape(createEndTimeShape());
 
 		// activityGridLayoutBean is new to v6.5 and is a layout that sizes the
 		// hight of the top whole day panel to the content.
@@ -229,244 +209,6 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		// bean.setActivitiesSupported(false);
 		// picker.setDateAreaContainer(bean);
 		// frame.setVisible(true);
-	}
-
-	private static final Category[] ZERO_CATS = new Category[0];
-
-	/**
-	 * Returns the categories for a point.
-	 * 
-	 * @param dateArea
-	 *            The date area.
-	 * @param p
-	 *            The point relative to the upper left corner of the DateArea.
-	 * @return The categories. May be empty but never null.
-	 */
-	private Category[] getCategoriesForPoint(DefaultDateArea dateArea, Point p) {
-		GridRow row = dateArea.getDateGrid().getRowAt(Grid.SECONDARY_DIMENSION,
-				p, Integer.MAX_VALUE);
-		if (row == null)
-			return ZERO_CATS;
-
-		CategoryFilter catFilter = (CategoryFilter) row.getFilter();
-		if (catFilter == null)
-			return ZERO_CATS;
-
-		Category[] c2Arr = catFilter.getCategories();
-		return c2Arr != null ? c2Arr : ZERO_CATS;
-	}
-
-	/**
-	 * Returns if the activity has a date range that is considered a "whole day"
-	 * activity.
-	 * 
-	 * @param subject
-	 *            The activity.
-	 * @return If the activity has a date range that is considered a "whole day"
-	 *         activity.
-	 */
-	private boolean isWholeDay(Object subject) {
-		return !((ActivityView) subject).getDateRangeForReading().getHasTime();
-	}
-
-	/**
-	 * Returns if the activity is currently interacted with (e.g. drag).
-	 * 
-	 * @param subject
-	 *            The activity.
-	 * @return If the activity is currently interacted with (e.g. drag).
-	 */
-	private boolean isInteracting(Object subject) {
-		StatesI states = ((ActivityView) subject).getModel().getStates();
-		return states.areStatesSet(
-				GenericStates.DRAGGING_BIT | GenericStates.RESIZE_END_BIT
-						| GenericStates.RESIZE_START_BIT, false);
-	}
-
-	/**
-	 * Returns if the activity is selected.
-	 * 
-	 * @param subject
-	 *            The activity
-	 * @return If the activity is selected.
-	 */
-	private boolean isSelected(Object subject) {
-		Activity act = ((ActivityView) subject).getModel();
-		if (act.getStates().isStateSet(GenericStates.SELECTED_BIT))
-			return true;
-
-		Object[] catIDs = act.getCategoryIDs();
-		if (catIDs != null) {
-			for (int i = 0; i < catIDs.length; i++) {
-				Object sel = CategoryDepository.getCategory(catIDs[i])
-						.getProperty(CategoryTreeBean.LABEL_SELECTED_KEY);
-				if (sel instanceof Boolean && ((Boolean) sel).booleanValue())
-					return true;
-			}
-		}
-		return false;
-	}
-
-	private void setCategoryOverride(Object id, Color baseColor) {
-		// Overrides for the colors in the category tree
-		String bgCatTreeName = CategoryTreeBean.LEAF_CHECK_BACKGROUND_SHAPE_NAME;
-		String outlineCatTreeName = CategoryTreeBean.LEAF_CHECK_OUTLINE_SHAPE_NAME;
-
-		CategoryDepository.setOverride(id, bgCatTreeName, AShape.A_PAINT,
-				new ShapeGradientPaint(baseColor, 0.7f, 115, false));
-		CategoryDepository.setOverride(id, outlineCatTreeName, AShape.A_PAINT,
-				baseColor);
-
-		// Overrides for the activities in the different date areas
-		setActivityCategoryOverride(id, baseColor, "", 90);
-		setActivityCategoryOverride(id, baseColor, "top_", 90);
-		setActivityCategoryOverride(id, baseColor, "month_", 120);
-	}
-
-	private void setActivityCategoryOverride(Object id, Color baseColor,
-			String namePrefix, int alpha) {
-		String bgName = namePrefix + AShapeUtil.DEFAULT_BACKGROUND_SHAPE_NAME;
-		String outlineName = namePrefix + AShapeUtil.DEFAULT_OUTLINE_SHAPE_NAME;
-		String textName = namePrefix + AShapeUtil.DEFAULT_MAIN_TEXT_SHAPE_NAME;
-		String titleName = namePrefix
-				+ AShapeUtil.DEFAULT_TITLE_TEXT_SHAPE_NAME;
-
-		CategoryDepository.setOverride(id, bgName, AShape.A_PAINT,
-				GfxUtil.alphaColor(baseColor, alpha));
-		CategoryDepository.setOverride(id, outlineName, AShape.A_PAINT,
-				baseColor);
-		CategoryDepository.setOverride(id, textName, AShape.A_PAINT, baseColor);
-		CategoryDepository
-				.setOverride(id, titleName, AShape.A_PAINT, baseColor);
-	}
-
-	private void configureSelectedActivityChanges(String prefix) {
-		// Opaque gradient background for selected
-		ActivityInteractor.setStaticOverride(prefix
-				+ AShapeUtil.DEFAULT_BACKGROUND_SHAPE_NAME, AShape.A_PAINT,
-				new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						if (isSelected(subject)) {
-							Color baseColor = GfxUtil.alphaColor(
-									(Color) defaultObject, 255);
-							Color c1 = GfxUtil.getCrossColor(baseColor,
-									Color.WHITE, 0.15f);
-							Color c2 = GfxUtil.getCrossColor(baseColor,
-									Color.WHITE, 0.4f);
-							return new ShapeGradientPaint(c1, c2, 0, 1f, 0.5f,
-									false);
-						}
-						return defaultObject;
-					}
-				});
-
-		// White title for selected
-		ActivityInteractor.setStaticOverride(prefix
-				+ AShapeUtil.DEFAULT_TITLE_TEXT_SHAPE_NAME, AShape.A_PAINT,
-				new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						return isSelected(subject) ? Color.WHITE
-								: defaultObject;
-					}
-				});
-
-		// White text for selected
-		ActivityInteractor.setStaticOverride(prefix
-				+ AShapeUtil.DEFAULT_MAIN_TEXT_SHAPE_NAME, AShape.A_PAINT,
-				new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						return isSelected(subject) ? Color.WHITE
-								: defaultObject;
-					}
-				});
-
-		// Shadow visible for selected
-		ActivityInteractor.setStaticOverride(prefix
-				+ AShapeUtil.DEFAULT_SHADOW_SHAPE_NAME, AShape.A_VISIBILITY,
-				new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						return isSelected(subject) ? Visibility.TRUE
-								: Visibility.FALSE;
-					}
-				});
-
-		// Recurrency sub shape visible for recurrent activities
-		ActivityInteractor.setStaticOverride(prefix + "recur_circle",
-				AShape.A_VISIBILITY, new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						return ((ActivityView) subject).getModel()
-								.isRecurrent() ? Visibility.TRUE
-								: Visibility.FALSE;
-					}
-				});
-
-		// Bottom end time visible for dragging
-		ActivityInteractor.setStaticOverride(prefix + "end_time",
-				AShape.A_VISIBILITY, new OverrideFilter() {
-					public Object getOverride(Object subject,
-							Object defaultObject) {
-						return isInteracting(subject) ? Visibility.TRUE
-								: Visibility.FALSE;
-					}
-				});
-	}
-
-	/**
-	 * Create a shape for end time when moving
-	 * 
-	 * @return The shape. Never <code>null</code>.
-	 */
-	private static AShape createEndTimeShape() {
-		PlaceRect r = new AbsRect(AtStart.START0, AtStart.START0, AtEnd.END1,
-				AtEnd.END1);
-		Font f = new Font("sansserif", Font.PLAIN, 9);
-		TextAShape endTime = new TextAShape("end_time", "$endTimeExcl$", r,
-				TextAShape.TYPE_SINGLE_LINE, f, Color.WHITE, new AtEnd(-2),
-				new AtEnd(0), GfxUtil.AA_HINT_LCD_HRGB);
-		return endTime;
-	}
-
-	/**
-	 * Create the recurrence shape
-	 * 
-	 * @return The shape. Not <code>null</code>.
-	 */
-	private static AShape createRecurrenceShape() {
-		// Reuse names from the category bean so we only have to set one
-		// override.
-
-		PlaceRect r = new AbsRect(new AtEnd(-13), new AtStart(2),
-				new AtEnd(-4), new AtStart(11));
-		DrawAShape circle = new DrawAShape("recur_circle", new Ellipse2D.Float(
-				0, 0, 1, 1), r, Color.WHITE, new BasicStroke(1.0f),
-				GfxUtil.AA_HINT_ON);
-
-		Polygon polyUp = new Polygon();
-		polyUp.addPoint(0, 0);
-		polyUp.addPoint(100, -141);
-		polyUp.addPoint(200, 0);
-		r = new AbsRect(new AtFraction(-0.2f), new AtFraction(0.2f),
-				new AtFraction(0.45f), new AtFraction(0.7f));
-		FillAShape arrowUp = new FillAShape("recur_arr_up", polyUp, r,
-				Color.WHITE, GfxUtil.AA_HINT_ON);
-
-		Polygon polyDown = new Polygon();
-		polyDown.addPoint(0, -141);
-		polyDown.addPoint(100, 0);
-		polyDown.addPoint(200, -141);
-		r = new AbsRect(new AtFraction(0.55f), new AtFraction(0.3f),
-				new AtFraction(1.2f), new AtFraction(0.8f));
-		FillAShape arrowDown = new FillAShape("recur_arr_down", polyDown, r,
-				Color.WHITE, GfxUtil.AA_HINT_ON);
-
-		circle.addSubShape(arrowUp);
-		circle.addSubShape(arrowDown);
-		return circle;
 	}
 
 	private void setMode(int rangeType) {
@@ -1428,6 +1170,7 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 				newCreatedAct = new DefaultActivity(evt.getNewRange(),
 						new Long(new Random().nextLong()));
 				newCreatedAct.setSummary("New Event");
+				// TODO XXX HERE
 				ActivityDepository.getInstance(
 						dayDateArea.getActivityDepositoryContext())
 						.addBrokedActivity(newCreatedAct, this,
