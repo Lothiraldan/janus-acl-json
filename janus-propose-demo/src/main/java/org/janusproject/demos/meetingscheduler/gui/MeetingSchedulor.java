@@ -79,8 +79,8 @@ public class MeetingSchedulor {
 		this.mapping.get(name).setVisible(true);
 	}
 	
-	public void createMeeting(String initiator_name, List<String> participants, Calendar cal){
-		Meeting meeting = new Meeting(cal);
+	public void createMeeting(String initiator_name, List<String> participants, Calendar cal, String description){
+		Meeting meeting = new Meeting(cal, description);
 		Logger.getAnonymousLogger().info("Here ?");
 //		Meeting meeting = new Meeting()
 	}
