@@ -22,10 +22,13 @@ package org.janusproject.demos.meetingscheduler;
 
 import java.util.logging.Level;
 
-import org.arakhne.vmutil.locale.Locale;
-import org.janusproject.demos.meetingscheduler.agent.InitiatorAgent;
-import org.janusproject.demos.meetingscheduler.agent.ParticipantAgent;
+import org.janusproject.demos.meetingscheduler.agent.MeetingAgent;
+import org.janusproject.demos.meetingscheduler.gui.AgentCalendarUI;
+import org.janusproject.demos.meetingscheduler.gui.CopyOfAgentCalendarUI;
+import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
 import org.janusproject.kernel.Kernel;
+import org.janusproject.kernel.address.AgentAddress;
+import org.janusproject.kernel.agent.ChannelManager;
 import org.janusproject.kernel.agent.Kernels;
 import org.janusproject.kernel.logger.LoggerUtil;
 
@@ -50,16 +53,30 @@ public class Launcher {
 		LoggerUtil.setGlobalLevel(Level.ALL);
 		LoggerUtil.setShortLogMessageEnable(true);
 		
-		Kernel k = Kernels.get( false );
+		Kernel k = Kernels.get(false);
 		
-		InitiatorAgent initiator = new InitiatorAgent();
-		ParticipantAgent participant = new ParticipantAgent();
+		String[] names = {"Boris FELD"};//, "Nicolas GAUD", "Nicolas GRENIE"};
 		
-		k.submitLightAgent(initiator, Locale.getString(Launcher.class, "SENDER")); //$NON-NLS-1$
-		k.submitLightAgent(participant, Locale.getString(Launcher.class, "RECEIVER")); //$NON-NLS-1$
+		for (int i = 0; i < names.length; i++) {
+			launch(k, names[i]);
+		}
 		
 		k.launchDifferedExecutionAgents();	
 		
 		Kernels.killAll();
-	}	
+	}
+	
+	public static void launch(Kernel k, String name) {
+		MeetingAgent agent = new MeetingAgent();
+		k.submitLightAgent(agent, name);
+		
+		// Channel
+		AgentAddress aa = agent.getAddress();
+	    ChannelManager channelManager = k.getChannelManager();
+	    MeetingChannel channel = channelManager.getChannel(aa, MeetingChannel.class);
+	    
+	    // UI
+	    CopyOfAgentCalendarUI ui = new CopyOfAgentCalendarUI(name, channel);
+	    ui.setVisible(true);
+	}
 }

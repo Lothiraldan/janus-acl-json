@@ -14,8 +14,8 @@ public class Launcher {
 		// Create UI
 		MeetingSchedulor.setKernel(k);
 		MeetingSchedulor.getInstance().start();
-//		meetingProposalFrame m = new meetingProposalFrame();
-//		m.setVisible(true);
+		meetingProposalFrame m = new meetingProposalFrame();
+		m.setVisible(true);
 	}
 
 }

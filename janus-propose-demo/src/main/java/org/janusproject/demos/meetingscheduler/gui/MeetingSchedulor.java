@@ -11,6 +11,7 @@ import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
+import org.janusproject.kernel.crio.core.AddressUtil;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
 
 public class MeetingSchedulor {
