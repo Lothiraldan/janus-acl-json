@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 
@@ -23,6 +24,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 	private JList participantList;
 	private String initiator_name;
 	private Calendar initiator_invertcalendar;
+	private JTextField description_field;
 	
 	private static final long serialVersionUID = 234360639496126275L;
 	
@@ -36,6 +38,12 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
+		JPanel box = new JPanel();
+		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
+		description_field = new JTextField("Description");
+		
+		
+		
 		participantList = new JList(MeetingSchedulor.getInstance().getAllAgentExcept(name).toArray());
 		JScrollPane scrollPane = new JScrollPane(participantList);
 		
@@ -47,8 +55,11 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 		myTableModel model = new invertTableModel(initiator_invertcalendar);
 		JTable table = new JTable(model);
 		
+		box.add(description_field);
+		box.add(table);
+		
 		panel.add(scrollPane,BorderLayout.EAST);
-		panel.add(table,BorderLayout.CENTER);
+		panel.add(box,BorderLayout.CENTER);
 		panel.add(sendProposalButton,BorderLayout.SOUTH);
 		this.add(panel);
 	}
@@ -64,7 +75,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener {
 				for (int i = 0, n = selections.length; i < n; i++) {
 					partList.add((String)selectionValues[i]);
 				}
-				MeetingSchedulor.getInstance().createMeeting(initiator_name, partList, initiator_invertcalendar);
+				MeetingSchedulor.getInstance().createMeeting(initiator_name, partList, initiator_invertcalendar,description_field.getText());
 				this.dispose();
 				
 			}

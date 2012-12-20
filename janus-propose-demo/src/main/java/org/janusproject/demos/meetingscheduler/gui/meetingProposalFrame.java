@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 
@@ -30,6 +31,7 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
+	
 		String columnNames[] = { "Time Slot", "Rank" };
 		propList = new JTable(propositions, columnNames);
 
