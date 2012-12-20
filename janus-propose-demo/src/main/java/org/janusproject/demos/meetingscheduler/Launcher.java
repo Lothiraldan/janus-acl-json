@@ -23,13 +23,16 @@ package org.janusproject.demos.meetingscheduler;
 import java.util.logging.Level;
 
 import org.janusproject.demos.meetingscheduler.agent.MeetingAgent;
-import org.janusproject.demos.meetingscheduler.gui.AgentCalendarUI;
-import org.janusproject.demos.meetingscheduler.gui.CopyOfAgentCalendarUI;
+import org.janusproject.demos.meetingscheduler.gui.agentCalendarUI;
+import org.janusproject.demos.meetingscheduler.organization.ProposeOrganization;
 import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
+import org.janusproject.demos.meetingscheduler.role.MeetingRole;
+import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.agent.ChannelManager;
 import org.janusproject.kernel.agent.Kernels;
+import org.janusproject.kernel.crio.core.GroupAddress;
 import org.janusproject.kernel.logger.LoggerUtil;
 
 /**
@@ -44,39 +47,38 @@ import org.janusproject.kernel.logger.LoggerUtil;
  * @mavenartifactid $ArtifactId$
  */
 public class Launcher {
-	
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		LoggerUtil.setGlobalLevel(Level.ALL);
 		LoggerUtil.setShortLogMessageEnable(true);
-		
+
 		Kernel k = Kernels.get(false);
-		
-		String[] names = {"Boris FELD"};//, "Nicolas GAUD", "Nicolas GRENIE"};
-		
+		KernelWatcher kw = new KernelWatcher(k);
+
+		String[] names = { "Boris FELD"};//, "Nicolas GAUD", "Nicolas GRENIE" };
+
 		for (int i = 0; i < names.length; i++) {
-			launch(k, names[i]);
+			launch(k, kw, names[i]);
 		}
-		
-		k.launchDifferedExecutionAgents();	
-		
-		Kernels.killAll();
 	}
-	
-	public static void launch(Kernel k, String name) {
+
+	public static void launch(Kernel k, KernelWatcher kw, String name) {
 		MeetingAgent agent = new MeetingAgent();
 		k.submitLightAgent(agent, name);
-		
+
 		// Channel
 		AgentAddress aa = agent.getAddress();
-	    ChannelManager channelManager = k.getChannelManager();
-	    MeetingChannel channel = channelManager.getChannel(aa, MeetingChannel.class);
-	    
-	    // UI
-	    CopyOfAgentCalendarUI ui = new CopyOfAgentCalendarUI(name, channel);
-	    ui.setVisible(true);
+		GroupAddress ga = k.getOrCreateGroup(ProposeOrganization.class);
+		ChannelManager channelManager = k.getChannelManager();
+		MeetingChannel channel = channelManager.getChannel(aa, ga,
+				MeetingRole.class, MeetingChannel.class);
+
+		// UI
+		agentCalendarUI ui = new agentCalendarUI(name, channel, kw);
+		ui.setVisible(true);
 	}
 }

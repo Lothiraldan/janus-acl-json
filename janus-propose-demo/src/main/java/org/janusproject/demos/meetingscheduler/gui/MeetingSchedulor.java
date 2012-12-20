@@ -45,27 +45,6 @@ public class MeetingSchedulor {
 	}
 
 	
-	public List<String> getAllAgents(){
-		List<String> agents = new ArrayList<String>();
-		for (SizedIterator<AgentAddress> iterator = MeetingSchedulor.kernel.getAgents(); iterator.hasNext();) {
-			AgentAddress aagent = iterator.next();
-			if(!aagent.equals(this.kernelAgentAddress)) {
-				agents.add(aagent.getName());
-			}
-		}
-		return agents;
-	}
-	
-	public List<String> getAllAgentExcept(String name) {
-		List<String> agents = new ArrayList<String>();
-		for (SizedIterator<AgentAddress> iterator = MeetingSchedulor.kernel.getAgents(); iterator.hasNext();) {
-			AgentAddress aagent = iterator.next();
-			if(!aagent.equals(this.kernelAgentAddress) && !aagent.getName().equals(name)) {
-				agents.add(aagent.getName());
-			}
-		}
-		return agents;		
-	}
 	
 	public void addAgent(String name){
 		BaseAgent agent = new BaseAgent();

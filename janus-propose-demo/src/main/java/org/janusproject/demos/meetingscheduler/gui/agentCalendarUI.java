@@ -4,12 +4,14 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Point;
+import java.awt.dnd.DragGestureEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -20,6 +22,7 @@ import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 
 import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
+import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.ashape.interaction.InteractionEvent;
 import com.miginfocom.ashape.interaction.InteractionListener;
@@ -38,6 +41,7 @@ import com.miginfocom.util.MigUtil;
 import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.DateRangeI;
+import com.miginfocom.util.dates.ImmutableDateRange;
 import com.miginfocom.util.dates.MutableDateRange;
 import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
@@ -51,7 +55,7 @@ import com.miginfocom.util.states.ToolTipProvider;
  * <p>
  * The is a project for NetBeans that can be used directly.
  */
-public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
+public class agentCalendarUI extends javax.swing.JFrame {
 	/**
 	 * 
 	 */
@@ -63,10 +67,20 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 
 	private transient DefaultActivity newCreatedAct = null;
 
-	public CopyOfAgentCalendarUI(String name, MeetingChannel channel) {
-		setTitle("MiG Calendar Demo  (Component Version: "
-				+ LicenseValidator.getComponentVersion() + ")");
+	private String name;
+	private MeetingChannel channel;
 
+	private KernelWatcher kw;
+
+	public agentCalendarUI(String name, MeetingChannel channel, KernelWatcher kw) {
+		setTitle("Calendar of " + name);
+
+		// Base
+		this.name = name;
+		this.channel = channel;
+		this.kw = kw;
+
+		// GUI
 		initComponents();
 		configureComponents();
 
@@ -95,6 +109,7 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		});
 
 		currentDateArea.setDragStartDistance(10);
+		currentDateArea.setActivityDepositoryContext(this.name);
 	}
 
 	private void configureComponents() {
@@ -287,6 +302,7 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		monthButton = new javax.swing.JToggleButton();
 		spacer5 = new javax.swing.JPanel();
 		separatedButton = new javax.swing.JToggleButton();
+		newMeetingButton = new javax.swing.JButton();
 
 		overviewWestHeader
 				.setHeaderRows(new com.miginfocom.calendar.header.CellDecorationRow[] { new com.miginfocom.calendar.header.CellDecorationRow(
@@ -651,6 +667,15 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		westPanel.setPreferredSize(new java.awt.Dimension(190, 100));
 		westPanel.setLayout(new javax.swing.BoxLayout(westPanel,
 				javax.swing.BoxLayout.Y_AXIS));
+
+		newMeetingButton.setText("  New Meeting  ");
+		newMeetingButton.setFocusPainted(false);
+		newMeetingButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				newMeetingButtonActionPerformed(evt);
+			}
+		});
+		westPanel.add(newMeetingButton);
 
 		spacer2.setMinimumSize(new java.awt.Dimension(10, 8));
 		spacer2.setOpaque(false);
@@ -1083,6 +1108,12 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
+	protected void newMeetingButtonActionPerformed(ActionEvent evt) {
+		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name,
+				channel, kw);
+		initmeetingFrame.setVisible(true);
+	}
+
 	private void weekButtonActionPerformed(java.awt.event.ActionEvent evt)// GEN-FIRST:event_weekButtonActionPerformed
 	{// GEN-HEADEREND:event_weekButtonActionPerformed
 		setMode(DateRangeI.RANGE_TYPE_WEEK);
@@ -1164,23 +1195,36 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 		// This is the code that creates an activity by dragging in the day/days
 		// date area.
 		if (evt.getType() == DateChangeEvent.PRESSED) {
-
-			if (newCreatedAct == null
-					&& evt.getNewRange().getMillisSpanned(false, false) > 45 * 60 * 1000) {
-				newCreatedAct = new DefaultActivity(evt.getNewRange(),
-						new Long(new Random().nextLong()));
-				newCreatedAct.setSummary("New Event");
-				// TODO XXX HERE
-				ActivityDepository.getInstance(
-						dayDateArea.getActivityDepositoryContext())
-						.addBrokedActivity(newCreatedAct, this,
-								TimeSpanListEvent.ADDED_CREATED);
-			} else {
-				try {
-					newCreatedAct.setBaseDateRange(evt.getNewRange());
-				} catch (Exception ex) {
-				}
-			}
+			//
+			// if (newCreatedAct == null
+			// && evt.getNewRange().getMillisSpanned(false, false) > 45 * 60 *
+			// 1000) {
+			// ImmutableDateRange range = evt.getNewRange();
+			// DateRange dr = new DateRange();
+			// dr.setEnd(, arg1)
+			// for (Iterator iterator = dr.iterator(1000); iterator
+			// .hasNext();) {
+			// System.out.println("Date range " + (ImmutableDateRange)
+			// iterator.next());
+			// }
+			//
+			// initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(
+			// name, range.toString(), channel, kw);
+			// initmeetingFrame.setVisible(true);
+			// // newCreatedAct = new DefaultActivity(evt.getNewRange(),
+			// // new Long(new Random().nextLong()));
+			// // newCreatedAct.setSummary("New Event");
+			// // // TODO XXX HERE
+			// // ActivityDepository.getInstance(
+			// // dayDateArea.getActivityDepositoryContext())
+			// // .addBrokedActivity(newCreatedAct, this,
+			// // TimeSpanListEvent.ADDED_CREATED);
+			// } else {
+			// try {
+			// newCreatedAct.setBaseDateRange(evt.getNewRange());
+			// } catch (Exception ex) {
+			// }
+			// }
 		} else if (evt.getType() == DateChangeEvent.SELECTED) {
 			if (newCreatedAct != null) {
 				newCreatedAct.getStates().setStates(GenericStates.SELECTED_BIT,
@@ -1230,6 +1274,7 @@ public class CopyOfAgentCalendarUI extends javax.swing.JFrame {
 	private javax.swing.JPanel westPanel;
 	private com.miginfocom.beans.DateGroupConnectorBean yearConnector;
 	private javax.swing.JLabel yearLabel;
+	private javax.swing.JButton newMeetingButton;
 
 	// End of variables declaration//GEN-END:variables
 
