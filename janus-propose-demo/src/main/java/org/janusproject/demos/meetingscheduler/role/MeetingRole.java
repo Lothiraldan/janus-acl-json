@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
 import org.janusproject.demos.meetingscheduler.util.SerializationUtil;
@@ -22,21 +19,34 @@ import org.janusproject.kernel.crio.core.Role;
 import org.janusproject.kernel.message.Message;
 import org.janusproject.kernel.message.StringMessage;
 import org.janusproject.kernel.status.Status;
+import org.janusproject.kernel.status.StatusFactory;
 
 public class MeetingRole extends Role implements ChannelInteractable {
 
+	private UUID id;
 	private MeetingChannel meetingChannel = null;
 	private Map<UUID, Map<AgentAddress, MeetingResponse>> meetings = new HashMap<UUID, Map<AgentAddress, MeetingResponse>>();
+	private List<MeetingListener> listeners = new ArrayList<MeetingListener>();
+
+	public MeetingRole() {
+		super();
+		this.id = UUID.randomUUID();
+		this.meetingChannel = getChannel(MeetingChannel.class);
+	}
 
 	@Override
 	public Status live() {
-		// TODO Auto-generated method stub
-		return null;
+		for (Message m : getMailbox()) {
+			StringMessage msg = (StringMessage) m;
+			Meeting meeting = (Meeting) SerializationUtil.decode(msg.getContent());
+			for(MeetingListener listener : listeners) {
+				listener.incomingMeetingProposal(meeting);
+			}
+		}
+		return StatusFactory.ok("Ok");
 	}
 
 	private class MeetingChannelImplementation implements MeetingChannel {
-
-		private final List<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
 		@Override
 		public Address getChannelOwner() {
@@ -44,23 +54,16 @@ public class MeetingRole extends Role implements ChannelInteractable {
 			return null;
 		}
 
-		public synchronized void addChangeListener(ChangeListener listener) {
-			this.listeners.add(listener);
+		public synchronized void addMeetingListener(MeetingListener listener) {
+			MeetingRole.this.listeners.add(listener);
 		}
 
-		public synchronized void removeChangeListener(ChangeListener listener) {
-			this.listeners.remove(listener);
-		}
-
-		public synchronized void fireChange() {
-			ChangeEvent e = new ChangeEvent(this);
-			for (ChangeListener listener : this.listeners) {
-				listener.stateChanged(e);
-			}
+		public synchronized void removeMeetingListener(MeetingListener listener) {
+			MeetingRole.this.listeners.remove(listener);
 		}
 
 		public synchronized void release() {
-			this.listeners.clear();
+			MeetingRole.this.listeners.clear();
 		}
 
 		@Override
@@ -77,7 +80,6 @@ public class MeetingRole extends Role implements ChannelInteractable {
 						message);
 			}
 		}
-
 	}
 
 	public <C extends Channel> C getChannel(Class<C> channelClass,
@@ -107,8 +109,6 @@ public class MeetingRole extends Role implements ChannelInteractable {
 
 	@Override
 	public UUID getUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
-
 }

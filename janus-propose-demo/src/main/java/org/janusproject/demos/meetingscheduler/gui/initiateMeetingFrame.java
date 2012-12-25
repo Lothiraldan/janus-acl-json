@@ -130,7 +130,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 			List<String> participants = participantList.getSelectedValuesList();
 			List<ImmutableDateRange> hours = hoursList.getSelectedValuesList();
 			String description = description_field.getText();
-			Meeting meeting = new Meeting(hours, description);
+			Meeting meeting = new Meeting(this.initiator_name, hours, description);
 			this.kw.getChannel(this.initiator_name).createMeeting(meeting,
 					this.kw.getAgentByNames(participants));
 			this.dispose();

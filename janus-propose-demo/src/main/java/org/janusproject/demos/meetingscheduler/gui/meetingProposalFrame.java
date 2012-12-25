@@ -9,17 +9,21 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 
+import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.kernel.address.Address;
+
 public class meetingProposalFrame extends JFrame implements ActionListener {
+
+	
+	private static final long serialVersionUID = -8269547358309700827L;
 	private JTable propList;
 
-	public meetingProposalFrame() {
+	public meetingProposalFrame(String who, Meeting meeting) {
+		setTitle(who + " new meeting proposal from " + meeting.getInitiator());
 		String[][] propositions = { { "Monday 7-8", "" },
 				{ "Tuesday 14-15", "" }, { "Wednesday 17-18", "" },
 				{ "Wednesday 18-19", "" }, { "Friday 10-11" } };

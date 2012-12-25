@@ -4,46 +4,42 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Point;
-import java.awt.dnd.DragGestureEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 
-import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
+import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.role.MeetingListener;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
+import org.janusproject.kernel.address.Address;
 
 import com.miginfocom.ashape.interaction.InteractionEvent;
 import com.miginfocom.ashape.interaction.InteractionListener;
 import com.miginfocom.beans.ActivityGridLayoutBean;
 import com.miginfocom.beans.DateAreaBean;
 import com.miginfocom.calendar.activity.Activity;
-import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityInteractor;
 import com.miginfocom.calendar.activity.DefaultActivity;
 import com.miginfocom.calendar.activity.view.ActivityView;
 import com.miginfocom.calendar.datearea.DefaultDateArea;
 import com.miginfocom.calendar.decorators.GridCellRangeDecorator;
 import com.miginfocom.calendar.grid.Grid;
-import com.miginfocom.util.LicenseValidator;
 import com.miginfocom.util.MigUtil;
 import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.DateRangeI;
-import com.miginfocom.util.dates.ImmutableDateRange;
 import com.miginfocom.util.dates.MutableDateRange;
-import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
 import com.miginfocom.util.gfx.geometry.numbers.AtEnd;
 import com.miginfocom.util.gfx.geometry.numbers.AtStart;
@@ -55,7 +51,7 @@ import com.miginfocom.util.states.ToolTipProvider;
  * <p>
  * The is a project for NetBeans that can be used directly.
  */
-public class agentCalendarUI extends javax.swing.JFrame {
+public class agentCalendarUI extends JFrame implements MeetingListener {
 	/**
 	 * 
 	 */
@@ -108,6 +104,9 @@ public class agentCalendarUI extends javax.swing.JFrame {
 
 		currentDateArea.setDragStartDistance(10);
 		currentDateArea.setActivityDepositoryContext(this.name);
+
+		// Listener
+		this.kw.getChannel(this.name).addMeetingListener(this);
 	}
 
 	private void configureComponents() {
@@ -1326,5 +1325,12 @@ public class agentCalendarUI extends javax.swing.JFrame {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void incomingMeetingProposal(Meeting meeting) {
+		System.out.println("Meeting " + meeting);
+		meetingProposalFrame meetingProposal = new meetingProposalFrame(this.name, meeting);
+		meetingProposal.setVisible(true);
 	}
 }

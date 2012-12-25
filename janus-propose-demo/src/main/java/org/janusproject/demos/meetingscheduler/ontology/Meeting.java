@@ -10,16 +10,22 @@ import com.miginfocom.util.dates.ImmutableDateRange;
 
 public class Meeting implements Serializable {
 	
+	private String initiator;
 	private static final long serialVersionUID = 3733265177969466470L;
 	private List<ImmutableDateRange> dates;
 	private String description;
 	private UUID id;
 	
-	public Meeting(List<ImmutableDateRange> dates, String description) {
+	public Meeting(String initiator, List<ImmutableDateRange> dates, String description) {
 		super();
+		this.initiator = initiator;
 		this.id = UUID.randomUUID();
 		this.dates = dates;
 		this.description = description;
+	}
+
+	public String getInitiator() {
+		return initiator;
 	}
 
 	public UUID getId() {

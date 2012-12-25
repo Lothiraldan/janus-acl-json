@@ -10,15 +10,9 @@ import org.janusproject.kernel.channels.Channel;
 
 public interface MeetingChannel extends Channel {
 
-	/**
-	 * Add listener on state changes.
-	 */
-	public void addChangeListener(ChangeListener listener);
+	public void addMeetingListener(MeetingListener listener);
 
-	/**
-	 * Remove listener on state changes.
-	 */
-	public void removeChangeListener(ChangeListener listener);
+	public void removeMeetingListener(MeetingListener listener);
 
 	public void release();
 
