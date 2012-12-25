@@ -24,6 +24,10 @@ public class Meeting implements Serializable {
 		this.description = description;
 	}
 
+	public List<ImmutableDateRange> getDates() {
+		return dates;
+	}
+
 	public String getInitiator() {
 		return initiator;
 	}

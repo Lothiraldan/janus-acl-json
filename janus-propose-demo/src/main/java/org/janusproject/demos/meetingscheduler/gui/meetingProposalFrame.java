@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,19 +16,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
-import org.janusproject.kernel.address.Address;
+
+import com.miginfocom.util.dates.ImmutableDateRange;
 
 public class meetingProposalFrame extends JFrame implements ActionListener {
 
-	
 	private static final long serialVersionUID = -8269547358309700827L;
 	private JTable propList;
 
 	public meetingProposalFrame(String who, Meeting meeting) {
 		setTitle(who + " new meeting proposal from " + meeting.getInitiator());
-		String[][] propositions = { { "Monday 7-8", "" },
-				{ "Tuesday 14-15", "" }, { "Wednesday 17-18", "" },
-				{ "Wednesday 18-19", "" }, { "Friday 10-11" } };
+
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane,
 				getDefaultCloseOperation()));
@@ -35,9 +35,16 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-	
+
 		String columnNames[] = { "Time Slot", "Rank" };
-		propList = new JTable(propositions, columnNames);
+		
+		List<Object[]> data = new ArrayList<Object[]>();
+		for (ImmutableDateRange date: meeting.getDates()) {
+			Object[] row = {date, ""};
+			data.add(row);
+		}
+		
+		propList = new JTable(data.toArray(new Object[0][0]), columnNames);
 
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
