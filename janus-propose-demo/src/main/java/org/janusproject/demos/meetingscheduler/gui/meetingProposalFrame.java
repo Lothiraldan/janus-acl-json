@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -13,7 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 
@@ -36,15 +40,20 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 
-		String columnNames[] = { "Time Slot", "Rank" };
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.add("Time Slot");
+		columnNames.add("Rank");
 		
-		List<Object[]> data = new ArrayList<Object[]>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		for (ImmutableDateRange date: meeting.getDates()) {
-			Object[] row = {date, ""};
+			Vector<Object> row = new Vector<Object>();
+			row.add(date);
+			row.add(new JSpinner(new SpinnerNumberModel(0, 0, 10, 1)));
 			data.add(row);
 		}
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 		
-		propList = new JTable(data.toArray(new Object[0][0]), columnNames);
+		propList = new JTable(model);
 
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
