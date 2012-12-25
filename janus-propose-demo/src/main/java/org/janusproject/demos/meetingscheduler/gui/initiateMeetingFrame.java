@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -22,11 +23,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListDataListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Calendar;
+import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
@@ -35,14 +39,16 @@ import com.miginfocom.calendar.ThemeDatePicker;
 import com.miginfocom.theme.Themes;
 import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateChangeListener;
+import com.miginfocom.util.dates.DateRange;
+import com.miginfocom.util.dates.ImmutableDateRange;
 
 public class initiateMeetingFrame extends JFrame implements ActionListener,
 		DateChangeListener {
 
-	private MeetingChannel channel;
 	private KernelWatcher kw;
 
-	private JList participantList;
+	private JList<String> participantList;
+	private JList<ImmutableDateRange> hoursList;
 	private String initiator_name;
 	private JTextField description_field;
 
@@ -51,26 +57,24 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 
 	private static final long serialVersionUID = 234360639496126275L;
 
-	public initiateMeetingFrame(String name, MeetingChannel channel,
-			KernelWatcher kw) {
+	public initiateMeetingFrame(String name, KernelWatcher kw) {
 
 		// Init themes
 
 		try {
-			Themes.loadTheme("src/main/resources/themes/DatePicker1.tme", DP_THEME_CTX1, true);
+			Themes.loadTheme("src/main/resources/themes/DatePicker1.tme",
+					DP_THEME_CTX1, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		this.initiator_name = name;
-		this.channel = channel;
 		this.kw = kw;
 
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane,
 				getDefaultCloseOperation()));
-		this.setSize(500, 300);
-		this.setLocation(300, 400);
+		this.setSize(800, 300);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -79,17 +83,22 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS));
 		description_field = new JTextField("Description");
 
-		participantList = new JList(this.kw.getAllAgentExcept(name).toArray());
-		JScrollPane scrollPane = new JScrollPane(participantList);
+		participantList = new JList<String>(this.kw.getAllAgentExcept(name)
+				.toArray(new String[0]));
+		JScrollPane scrollPaneParticipants = new JScrollPane(participantList);
+
+		hoursList = new JList<ImmutableDateRange>();
+		JScrollPane scrollPaneHours = new JScrollPane(hoursList);
 
 		JButton sendProposalButton = new JButton("Send meeting proposal");
 		sendProposalButton.setActionCommand("SENDMEETING");
 		sendProposalButton.addActionListener(this);
 
+		box.add(scrollPaneHours);
 		box.add(description_field);
 
 		panel.add(createDatePickerPanel(), BorderLayout.NORTH);
-		panel.add(scrollPane, BorderLayout.EAST);
+		panel.add(scrollPaneParticipants, BorderLayout.EAST);
 		panel.add(box, BorderLayout.CENTER);
 		panel.add(sendProposalButton, BorderLayout.SOUTH);
 		this.add(panel);
@@ -118,25 +127,32 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "SENDMEETING") {
-			int selections[] = participantList.getSelectedIndices();
-			Object selectionValues[] = participantList.getSelectedValues();
-			List<String> partList = new ArrayList<String>();
-			if (selections != null) {
-				for (int i = 0, n = selections.length; i < n; i++) {
-					partList.add((String) selectionValues[i]);
-				}
-				this.dispose();
-
-			}
-
+			List<String> participants = participantList.getSelectedValuesList();
+			List<ImmutableDateRange> hours = hoursList.getSelectedValuesList();
+			String description = description_field.getText();
+			Meeting meeting = new Meeting(hours, description);
+			this.kw.getChannel(this.initiator_name).createMeeting(meeting,
+					this.kw.getAgentByNames(participants));
+			this.dispose();
 		}
-
 	}
 
 	@Override
-	public void dateRangeChanged(DateChangeEvent arg0) {
-		// TODO Auto-generated method stub
+	public void dateRangeChanged(DateChangeEvent e) {
+		if (e.getType() == DateChangeEvent.PRESSED) {
+			ImmutableDateRange range = e.getNewRange();
 
+			DefaultListModel<ImmutableDateRange> data = new DefaultListModel<ImmutableDateRange>();
+
+			@SuppressWarnings("unchecked")
+			Iterator<ImmutableDateRange> x = range.iterator(
+					DateRange.RANGE_TYPE_HOUR, 2);
+			while (x.hasNext()) {
+				data.addElement(x.next());
+			}
+			hoursList.removeAll();
+			hoursList.setModel(data);
+		}
 	}
 
 }

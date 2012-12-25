@@ -68,16 +68,14 @@ public class agentCalendarUI extends javax.swing.JFrame {
 	private transient DefaultActivity newCreatedAct = null;
 
 	private String name;
-	private MeetingChannel channel;
 
 	private KernelWatcher kw;
 
-	public agentCalendarUI(String name, MeetingChannel channel, KernelWatcher kw) {
+	public agentCalendarUI(String name, KernelWatcher kw) {
 		setTitle("Calendar of " + name);
 
 		// Base
 		this.name = name;
-		this.channel = channel;
 		this.kw = kw;
 
 		// GUI
@@ -1109,8 +1107,7 @@ public class agentCalendarUI extends javax.swing.JFrame {
 	}// </editor-fold>//GEN-END:initComponents
 
 	protected void newMeetingButtonActionPerformed(ActionEvent evt) {
-		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name,
-				channel, kw);
+		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name, kw);
 		initmeetingFrame.setVisible(true);
 	}
 

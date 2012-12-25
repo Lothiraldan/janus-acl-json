@@ -59,7 +59,7 @@ public class Launcher {
 		Kernel k = Kernels.get(false);
 		KernelWatcher kw = new KernelWatcher(k);
 
-		String[] names = { "Boris FELD"};//, "Nicolas GAUD", "Nicolas GRENIE" };
+		String[] names = { "Boris FELD", "Nicolas GAUD", "Nicolas GRENIE" };
 
 		for (int i = 0; i < names.length; i++) {
 			launch(k, kw, names[i]);
@@ -69,16 +69,10 @@ public class Launcher {
 	public static void launch(Kernel k, KernelWatcher kw, String name) {
 		MeetingAgent agent = new MeetingAgent();
 		k.submitLightAgent(agent, name);
-
-		// Channel
-		AgentAddress aa = agent.getAddress();
-		GroupAddress ga = k.getOrCreateGroup(ProposeOrganization.class);
-		ChannelManager channelManager = k.getChannelManager();
-		MeetingChannel channel = channelManager.getChannel(aa, ga,
-				MeetingRole.class, MeetingChannel.class);
+		k.launchDifferedExecutionAgents();
 
 		// UI
-		agentCalendarUI ui = new agentCalendarUI(name, channel, kw);
+		agentCalendarUI ui = new agentCalendarUI(name, kw);
 		ui.setVisible(true);
 	}
 }

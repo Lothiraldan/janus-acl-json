@@ -2,7 +2,9 @@ package org.janusproject.demos.meetingscheduler.role;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,15 +12,21 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
+import org.janusproject.demos.meetingscheduler.util.SerializationUtil;
 import org.janusproject.kernel.address.Address;
+import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.channels.Channel;
 import org.janusproject.kernel.channels.ChannelInteractable;
 import org.janusproject.kernel.crio.core.Role;
+import org.janusproject.kernel.message.Message;
+import org.janusproject.kernel.message.StringMessage;
 import org.janusproject.kernel.status.Status;
 
 public class MeetingRole extends Role implements ChannelInteractable {
 
 	private MeetingChannel meetingChannel = null;
+	private Map<UUID, Map<AgentAddress, MeetingResponse>> meetings = new HashMap<UUID, Map<AgentAddress, MeetingResponse>>();
 
 	@Override
 	public Status live() {
@@ -56,10 +64,20 @@ public class MeetingRole extends Role implements ChannelInteractable {
 		}
 
 		@Override
-		public void createMeeting(Meeting meeting) {
-			System.out.println("Create meeting with " + meeting);
-			// TODO Auto-generated method stub
+		public void createMeeting(Meeting meeting,
+				List<AgentAddress> participants) {
+			String encoded_meeting = SerializationUtil.encode(meeting);
+			Message message = new StringMessage(encoded_meeting);
+			Map<AgentAddress, MeetingResponse> meet = new HashMap<AgentAddress, MeetingResponse>();
+			MeetingRole.this.meetings.put(meeting.getId(), meet);
+
+			for (AgentAddress agentAddress : participants) {
+				meet.put(agentAddress, null);
+				MeetingRole.this.sendMessage(MeetingRole.class, agentAddress,
+						message);
+			}
 		}
+
 	}
 
 	public <C extends Channel> C getChannel(Class<C> channelClass,

@@ -42,8 +42,7 @@ public class ProposeOrganization extends Organization {
 	 */
 	public ProposeOrganization(final CRIOContext crioContext) {
 		super(crioContext);
-		addRole(Initiator.class);
-		addRole(Participant.class);
+		addRole(MeetingRole.class);
 	}
 
 }
