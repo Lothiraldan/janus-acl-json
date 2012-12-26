@@ -24,15 +24,9 @@ import java.util.logging.Level;
 
 import org.janusproject.demos.meetingscheduler.agent.MeetingAgent;
 import org.janusproject.demos.meetingscheduler.gui.agentCalendarUI;
-import org.janusproject.demos.meetingscheduler.organization.ProposeOrganization;
-import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
-import org.janusproject.demos.meetingscheduler.role.MeetingRole;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 import org.janusproject.kernel.Kernel;
-import org.janusproject.kernel.address.AgentAddress;
-import org.janusproject.kernel.agent.ChannelManager;
 import org.janusproject.kernel.agent.Kernels;
-import org.janusproject.kernel.crio.core.GroupAddress;
 import org.janusproject.kernel.logger.LoggerUtil;
 
 /**

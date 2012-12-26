@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -22,13 +23,13 @@ import javax.swing.SwingUtilities;
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.role.MeetingListener;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
-import org.janusproject.kernel.address.Address;
 
 import com.miginfocom.ashape.interaction.InteractionEvent;
 import com.miginfocom.ashape.interaction.InteractionListener;
 import com.miginfocom.beans.ActivityGridLayoutBean;
 import com.miginfocom.beans.DateAreaBean;
 import com.miginfocom.calendar.activity.Activity;
+import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityInteractor;
 import com.miginfocom.calendar.activity.DefaultActivity;
 import com.miginfocom.calendar.activity.view.ActivityView;
@@ -40,6 +41,7 @@ import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.DateRangeI;
 import com.miginfocom.util.dates.MutableDateRange;
+import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
 import com.miginfocom.util.gfx.geometry.numbers.AtEnd;
 import com.miginfocom.util.gfx.geometry.numbers.AtStart;
@@ -1191,36 +1193,15 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 		// This is the code that creates an activity by dragging in the day/days
 		// date area.
 		if (evt.getType() == DateChangeEvent.PRESSED) {
-			//
-			// if (newCreatedAct == null
-			// && evt.getNewRange().getMillisSpanned(false, false) > 45 * 60 *
-			// 1000) {
-			// ImmutableDateRange range = evt.getNewRange();
-			// DateRange dr = new DateRange();
-			// dr.setEnd(, arg1)
-			// for (Iterator iterator = dr.iterator(1000); iterator
-			// .hasNext();) {
-			// System.out.println("Date range " + (ImmutableDateRange)
-			// iterator.next());
-			// }
-			//
-			// initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(
-			// name, range.toString(), channel, kw);
-			// initmeetingFrame.setVisible(true);
-			// // newCreatedAct = new DefaultActivity(evt.getNewRange(),
-			// // new Long(new Random().nextLong()));
-			// // newCreatedAct.setSummary("New Event");
-			// // // TODO XXX HERE
-			// // ActivityDepository.getInstance(
-			// // dayDateArea.getActivityDepositoryContext())
-			// // .addBrokedActivity(newCreatedAct, this,
-			// // TimeSpanListEvent.ADDED_CREATED);
-			// } else {
-			// try {
-			// newCreatedAct.setBaseDateRange(evt.getNewRange());
-			// } catch (Exception ex) {
-			// }
-			// }
+			if (newCreatedAct == null && evt.getNewRange().getMillisSpanned(false, false) > 45*60*1000) {
+				newCreatedAct = new DefaultActivity(evt.getNewRange(), new Long(new Random().nextLong()));
+				newCreatedAct.setSummary("New Event");
+				ActivityDepository.getInstance(dayDateArea.getActivityDepositoryContext()).addBrokedActivity(newCreatedAct, this, TimeSpanListEvent.ADDED_CREATED);
+			} else {
+				try {
+					newCreatedAct.setBaseDateRange(evt.getNewRange());
+				} catch (Exception ex) {}
+			}
 		} else if (evt.getType() == DateChangeEvent.SELECTED) {
 			if (newCreatedAct != null) {
 				newCreatedAct.getStates().setStates(GenericStates.SELECTED_BIT,

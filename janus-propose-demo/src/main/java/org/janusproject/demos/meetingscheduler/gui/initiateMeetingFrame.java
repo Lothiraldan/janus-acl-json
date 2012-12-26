@@ -5,10 +5,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,21 +18,18 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListDataListener;
 
-import org.janusproject.demos.meetingscheduler.ontology.Calendar;
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
-import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.DatePicker;
 import com.miginfocom.calendar.ThemeDatePicker;
+import com.miginfocom.calendar.activity.ActivityDepository;
+import com.miginfocom.calendar.activity.ActivityList;
 import com.miginfocom.theme.Themes;
 import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateChangeListener;
@@ -55,6 +49,8 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 	private static final String DP_THEME_CTX1 = "datePicker1";
 	private DatePicker datePicker;
 
+	private ActivityDepository depository;
+
 	private static final long serialVersionUID = 234360639496126275L;
 
 	public initiateMeetingFrame(String name, KernelWatcher kw) {
@@ -70,6 +66,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 
 		this.initiator_name = name;
 		this.kw = kw;
+		this.depository = ActivityDepository.getInstance(name);
 
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BoxLayout(contentPane,
@@ -130,7 +127,8 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 			List<String> participants = participantList.getSelectedValuesList();
 			List<ImmutableDateRange> hours = hoursList.getSelectedValuesList();
 			String description = description_field.getText();
-			Meeting meeting = new Meeting(this.initiator_name, hours, description);
+			Meeting meeting = new Meeting(this.initiator_name, hours,
+					description);
 			this.kw.getChannel(this.initiator_name).createMeeting(meeting,
 					this.kw.getAgentByNames(participants));
 			this.dispose();
@@ -144,11 +142,16 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 
 			DefaultListModel<ImmutableDateRange> data = new DefaultListModel<ImmutableDateRange>();
 
+			ActivityList existingActivites = depository.getActivities();
+
 			@SuppressWarnings("unchecked")
 			Iterator<ImmutableDateRange> x = range.iterator(
 					DateRange.RANGE_TYPE_HOUR, 2);
 			while (x.hasNext()) {
-				data.addElement(x.next());
+				ImmutableDateRange date = x.next();
+				if (!existingActivites.hasOverlapping(date.getDateRangeForReading())) {
+					data.addElement(date);
+				}
 			}
 			hoursList.removeAll();
 			hoursList.setModel(data);
