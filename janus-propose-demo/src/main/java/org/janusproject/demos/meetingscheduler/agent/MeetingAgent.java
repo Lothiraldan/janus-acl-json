@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.janusproject.acl.ACLAgent;
+import org.janusproject.acl.ACLMessage;
+import org.janusproject.acl.Performative;
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingManager;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
@@ -37,14 +39,27 @@ public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 
 	public Status live() {
 		Status s = super.live();
-		for (Message m : getMailbox()) {
-			StringMessage msg = (StringMessage) m;
-			Meeting meeting = (Meeting) SerializationUtil.decode(msg
-					.getContent());
-			meetingManager.saveInitiatorAddress(meeting.getId(),
-					msg.getSender());
-			for (MeetingListener listener : listeners) {
-				listener.incomingMeetingProposal(meeting);
+
+		ACLMessage aMsg = getACLMessage();
+		if (aMsg != null) {
+			Performative performative = aMsg.getPerformative();
+			if (performative == Performative.PROPOSE) {
+				Meeting meeting = (Meeting) SerializationUtil.decode(aMsg
+						.getContent().getContent().toString());
+				meetingManager.saveInitiatorAddress(meeting.getId(),
+						aMsg.getSender());
+				for (MeetingListener listener : listeners) {
+					listener.incomingMeetingProposal(meeting);
+				}
+			} else if (performative == Performative.ACCEPT_PROPOSAL) {
+				MeetingResponse meetingResponse = (MeetingResponse) SerializationUtil
+						.decode(aMsg.getContent().getContent().toString());
+				meetingManager.process_response(meetingResponse,
+						aMsg.getSender());
+
+				if (meetingManager.hasAllResponses(meetingResponse.getId())) {
+					System.out.println("Ready to show !");
+				}
 			}
 		}
 		return s;
@@ -74,22 +89,26 @@ public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 		public void createMeeting(Meeting meeting,
 				List<AgentAddress> participants) {
 			String encoded_meeting = SerializationUtil.encode(meeting);
-			Message message = new StringMessage(encoded_meeting);
+			ACLMessage message = new ACLMessage(encoded_meeting,
+					Performative.PROPOSE);
+			MeetingAgent.this.meetingManager.processNewMeeting(meeting,
+					participants);
 			// Map<AgentAddress, MeetingResponse> meet = new
 			// HashMap<AgentAddress, MeetingResponse>();
 			// MeetingAgent.this.meetings.put(meeting.getId(), meet);
-			MeetingAgent.this.sendMessage(message, participants);
+			for (AgentAddress agentAddress : participants) {
+				MeetingAgent.this.sendACLMessage(message, agentAddress);
+			}
 		}
 
 		@Override
 		public void responseMeeting(MeetingResponse meetingResponse) {
 			Address address = MeetingAgent.this.meetingManager
 					.getInitiatorAddress(meetingResponse.getId());
-			MeetingAgent.this
-					.sendMessage(
-							new StringMessage(SerializationUtil
-									.encode(meetingResponse)),
-							(AgentAddress) address);
+			MeetingAgent.this.sendACLMessage(
+					new ACLMessage(SerializationUtil.encode(meetingResponse),
+							Performative.ACCEPT_PROPOSAL),
+					(AgentAddress) address);
 		}
 	}
 
