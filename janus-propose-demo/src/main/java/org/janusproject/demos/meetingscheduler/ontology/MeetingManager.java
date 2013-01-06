@@ -57,4 +57,8 @@ public class MeetingManager {
 	public Boolean hasAllResponses(UUID id) {
 		return this.waitingResponses.get(id).size() == 0;
 	}
+
+	public Map<ImmutableDateRange, MeetingTimeSlot> getSlots(UUID id) {
+		return this.meetingSlots.get(id);
+	}
 }

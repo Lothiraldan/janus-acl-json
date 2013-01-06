@@ -18,10 +18,7 @@ import org.janusproject.kernel.address.Address;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.channels.Channel;
 import org.janusproject.kernel.channels.ChannelInteractable;
-import org.janusproject.kernel.message.Message;
-import org.janusproject.kernel.message.StringMessage;
 import org.janusproject.kernel.status.Status;
-import org.janusproject.kernel.status.StatusFactory;
 
 public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 
@@ -58,7 +55,9 @@ public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 						aMsg.getSender());
 
 				if (meetingManager.hasAllResponses(meetingResponse.getId())) {
-					System.out.println("Ready to show !");
+					for (MeetingListener listener : listeners) {
+						listener.chooseMeetingTimeSlot(meetingManager.getSlots(meetingResponse.getId()));
+					}
 				}
 			}
 		}

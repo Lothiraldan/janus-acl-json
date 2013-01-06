@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -21,6 +22,7 @@ import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
 import org.janusproject.demos.meetingscheduler.role.MeetingListener;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
@@ -40,6 +42,7 @@ import com.miginfocom.util.MigUtil;
 import com.miginfocom.util.dates.DateChangeEvent;
 import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.DateRangeI;
+import com.miginfocom.util.dates.ImmutableDateRange;
 import com.miginfocom.util.dates.MutableDateRange;
 import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
@@ -1310,8 +1313,15 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 
 	@Override
 	public void incomingMeetingProposal(Meeting meeting) {
-		System.out.println("Meeting " + meeting);
 		meetingProposalFrame meetingProposal = new meetingProposalFrame(this.name, meeting, this.kw);
 		meetingProposal.setVisible(true);
+	}
+
+	@Override
+	public void chooseMeetingTimeSlot(
+			Map<ImmutableDateRange, MeetingTimeSlot> slots) {
+		chooseMeetingtimeSlotFrame meetingTimeSlot = new chooseMeetingtimeSlotFrame(this.name, slots);
+		meetingTimeSlot.setVisible(true);
+		
 	}
 }
