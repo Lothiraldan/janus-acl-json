@@ -77,9 +77,7 @@ public class KernelWatcher {
 			return null;
 		}
 
-		GroupAddress ga = k.getOrCreateGroup(ProposeOrganization.class);
 		ChannelManager channelManager = k.getChannelManager();
-		return channelManager.getChannel(aaddress, ga,
-				MeetingRole.class, MeetingChannel.class);
+		return channelManager.getChannel(aaddress, MeetingChannel.class);
 	}
 }

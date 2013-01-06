@@ -20,6 +20,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
+import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityList;
@@ -30,8 +32,15 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -8269547358309700827L;
 	private JTable propList;
 	private ActivityDepository depository;
+	private Vector<Vector<Object>> data;
+	private Meeting meeting;
+	private KernelWatcher kw;
+	private String who;
 
-	public meetingProposalFrame(String who, Meeting meeting) {
+	public meetingProposalFrame(String who, Meeting meeting, KernelWatcher kw) {
+		this.meeting = meeting;
+		this.kw = kw;
+		this.who = who;
 		setTitle(who + " new meeting proposal from " + meeting.getInitiator());
 
 		this.depository = ActivityDepository.getInstance(who);
@@ -49,15 +58,17 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		columnNames.add("Time Slot");
 		columnNames.add("Rank");
 
-		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+		data = new Vector<Vector<Object>>();
 
 		ActivityList existingActivites = depository.getActivities();
 
 		for (ImmutableDateRange date : meeting.getDates()) {
-			if (!existingActivites.hasOverlapping(date.getDateRangeForReading())) {
+			if (!existingActivites
+					.hasOverlapping(date.getDateRangeForReading())) {
 				Vector<Object> row = new Vector<Object>();
 				row.add(date);
-				row.add(new JSpinner(new SpinnerNumberModel(0, 0, 10, 1)));
+				// row.add(new JSpinner(new SpinnerNumberModel(0, 0, 10, 1)));
+				row.add("");
 				data.add(row);
 			}
 		}
@@ -87,7 +98,12 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "SUBMIT") {
-
+			MeetingResponse meetingResponse = new MeetingResponse(meeting);
+			for (int i = 0; i < propList.getModel().getRowCount(); i++) {
+				meetingResponse.addResponseDate((ImmutableDateRange) data
+						.get(i).get(0), Integer.parseInt((String) propList.getModel().getValueAt(i, 1)));
+			}
+			this.kw.getChannel(this.who).responseMeeting(meetingResponse);
 		}
 
 	}

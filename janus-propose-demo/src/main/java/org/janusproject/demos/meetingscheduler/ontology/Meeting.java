@@ -1,11 +1,9 @@
 package org.janusproject.demos.meetingscheduler.ontology;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.ImmutableDateRange;
 
 public class Meeting implements Serializable {

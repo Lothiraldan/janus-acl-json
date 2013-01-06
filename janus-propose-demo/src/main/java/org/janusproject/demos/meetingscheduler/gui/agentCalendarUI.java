@@ -1311,7 +1311,7 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 	@Override
 	public void incomingMeetingProposal(Meeting meeting) {
 		System.out.println("Meeting " + meeting);
-		meetingProposalFrame meetingProposal = new meetingProposalFrame(this.name, meeting);
+		meetingProposalFrame meetingProposal = new meetingProposalFrame(this.name, meeting, this.kw);
 		meetingProposal.setVisible(true);
 	}
 }
