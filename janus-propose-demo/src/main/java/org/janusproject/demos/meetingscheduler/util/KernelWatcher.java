@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.janusproject.demos.meetingscheduler.organization.ProposeOrganization;
 import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
-import org.janusproject.demos.meetingscheduler.role.MeetingRole;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.agent.ChannelManager;
