@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -35,6 +36,10 @@ import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityInteractor;
 import com.miginfocom.calendar.activity.DefaultActivity;
 import com.miginfocom.calendar.activity.view.ActivityView;
+import com.miginfocom.calendar.datearea.ActivityDragResizeEvent;
+import com.miginfocom.calendar.datearea.ActivityDragResizeListener;
+import com.miginfocom.calendar.datearea.ActivityMoveEvent;
+import com.miginfocom.calendar.datearea.ActivityMoveListener;
 import com.miginfocom.calendar.datearea.DefaultDateArea;
 import com.miginfocom.calendar.decorators.GridCellRangeDecorator;
 import com.miginfocom.calendar.grid.Grid;
@@ -56,7 +61,7 @@ import com.miginfocom.util.states.ToolTipProvider;
  * <p>
  * The is a project for NetBeans that can be used directly.
  */
-public class agentCalendarUI extends JFrame implements MeetingListener {
+public class agentCalendarUI extends JFrame implements MeetingListener, ActivityMoveListener, ActivityDragResizeListener {
 	/**
 	 * 
 	 */
@@ -65,8 +70,6 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 	private transient DateAreaBean currentDateArea;
 
 	private ActivityGridLayoutBean activityGridLayoutBean = new ActivityGridLayoutBean();
-
-	private transient DefaultActivity newCreatedAct = null;
 
 	private String name;
 
@@ -107,7 +110,6 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 			}
 		});
 
-		currentDateArea.setDragStartDistance(10);
 		currentDateArea.setActivityDepositoryContext(this.name);
 
 		// Listener
@@ -125,9 +127,6 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 		activityGridLayoutBean.setMinimumRowSize(16);
 		activityGridLayoutBean.setRoundActivityTo(DateRangeI.RANGE_TYPE_DAY);
 		topDayArea.setSecondaryDimensionLayout(activityGridLayoutBean);
-
-		// Makes drag-create snappier
-		dayDateArea.getDateArea().setActivityLayoutDelay(0);
 
 		// Add a tooltip provider that is much more configurable than for a
 		// normal Swing component
@@ -169,14 +168,15 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 		dayDA.addDecorator(new GridCellRangeDecorator(dayDA, 20, cells,
 				rowColor, Grid.SIZE_MODE_INSIDE, false));
 
-		// Add popup menu to activities
-		dayDateArea.addInteractionListener(new ActivityInteractionListener());
-		topDayArea.addInteractionListener(new ActivityInteractionListener());
-		monthDateArea.addInteractionListener(new ActivityInteractionListener());
-
 		monthDateArea.getDateArea().setToolTipProvider(myTTP);
+		monthDateArea.addActivityMoveListener(this);
+		monthDateArea.addActivityDragResizeListener(this);
 		dayDateArea.getDateArea().setToolTipProvider(myTTP);
+		dayDateArea.addActivityMoveListener(this);
+		dayDateArea.addActivityDragResizeListener(this);
 		topDayArea.getDateArea().setToolTipProvider(myTTP);
+		topDayArea.addActivityMoveListener(this);
+		topDayArea.addActivityDragResizeListener(this);
 
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(weekButton);
@@ -927,13 +927,6 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 		dayDateArea.setVerticalGridLinePaintOdd(new java.awt.Color(204, 204,
 				204));
 		dayDateArea.setVerticalGridLineShowFirst(true);
-		dayDateArea
-				.addDateChangeListener(new com.miginfocom.util.dates.DateChangeListener() {
-					public void dateRangeChanged(
-							com.miginfocom.util.dates.DateChangeEvent evt) {
-						dayDateAreaDateRangeChanged(evt);
-					}
-				});
 		dayPanel.add(dayDateArea, java.awt.BorderLayout.CENTER);
 
 		mainParentPanel.add(dayPanel, "day");
@@ -1111,7 +1104,8 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 	}// </editor-fold>//GEN-END:initComponents
 
 	protected void newMeetingButtonActionPerformed(ActionEvent evt) {
-		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name, kw);
+		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name,
+				kw);
 		initmeetingFrame.setVisible(true);
 	}
 
@@ -1190,30 +1184,6 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 		currentDateArea.revalidate();
 	}// GEN-LAST:event_separatedButtonActionPerformed
 
-	private void dayDateAreaDateRangeChanged(
-			com.miginfocom.util.dates.DateChangeEvent evt)// GEN-FIRST:event_dayDateAreaDateRangeChanged
-	{// GEN-HEADEREND:event_dayDateAreaDateRangeChanged
-		// This is the code that creates an activity by dragging in the day/days
-		// date area.
-		if (evt.getType() == DateChangeEvent.PRESSED) {
-			if (newCreatedAct == null && evt.getNewRange().getMillisSpanned(false, false) > 45*60*1000) {
-				newCreatedAct = new DefaultActivity(evt.getNewRange(), new Long(new Random().nextLong()));
-				newCreatedAct.setSummary("New Event");
-				ActivityDepository.getInstance(dayDateArea.getActivityDepositoryContext()).addBrokedActivity(newCreatedAct, this, TimeSpanListEvent.ADDED_CREATED);
-			} else {
-				try {
-					newCreatedAct.setBaseDateRange(evt.getNewRange());
-				} catch (Exception ex) {}
-			}
-		} else if (evt.getType() == DateChangeEvent.SELECTED) {
-			if (newCreatedAct != null) {
-				newCreatedAct.getStates().setStates(GenericStates.SELECTED_BIT,
-						true);
-				newCreatedAct = null;
-			}
-		}
-	}// GEN-LAST:event_dayDateAreaDateRangeChanged
-
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private com.miginfocom.beans.ActivityAShapeBean activityDayAShape;
 	private com.miginfocom.beans.ActivityAShapeBean activityMonthAShape;
@@ -1258,70 +1228,38 @@ public class agentCalendarUI extends JFrame implements MeetingListener {
 
 	// End of variables declaration//GEN-END:variables
 
-	/**
-	 * Listens for interactions with the activities
-	 */
-	private class ActivityInteractionListener implements InteractionListener {
-		public void interactionOccured(InteractionEvent e) {
-			final Object o = e.getInteractor().getInteracted();
-
-			if (o instanceof ActivityView
-					&& e.getSourceEvent() instanceof MouseEvent) {
-				final ActivityView actView = (ActivityView) o;
-				final DefaultDateArea dateArea = (DefaultDateArea) actView
-						.getContainer();
-
-				JPopupMenu pop = new JPopupMenu();
-				final Point p = ((MouseEvent) e.getSourceEvent()).getPoint();
-				Object commandValue = e.getCommand().getValue();
-
-				if (DefaultDateArea.AE_POPUP_TRIGGER.equals(commandValue)) {
-					boolean hasTime = actView.getModel().getBaseDateRange()
-							.getHasTime();
-					String menuText = hasTime ? "Make All Day Event"
-							: "Make Regular Event";
-					pop.add(menuText).addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							Activity act = ((ActivityView) o).getModel();
-							MutableDateRange dr = act.getDateRangeClone();
-							dr.setHasTime(!dr.getHasTime());
-
-							try {
-								act.setBaseDateRange(dr.getImmutable());
-							} catch (PropertyVetoException e1) {
-							}
-
-							monthDateArea.getDateArea().recreateActivityViews();
-							dayDateArea.getDateArea().recreateActivityViews();
-							topDayArea.getDateArea().recreateActivityViews();
-						}
-					});
-
-					pop.show(actView.getContainer(), p.x, p.y);
-
-				} else if (DefaultDateArea.AE_DOUBLE_CLICKED
-						.equals(commandValue)) {
-					Activity act = ((ActivityView) o).getModel();
-					String summary = JOptionPane.showInputDialog(dateArea,
-							"Please enter a summary", act.getSummary());
-					if (summary != null)
-						act.setSummary(summary);
-				}
-			}
-		}
-	}
-
 	@Override
 	public void incomingMeetingProposal(Meeting meeting) {
-		meetingProposalFrame meetingProposal = new meetingProposalFrame(this.name, meeting, this.kw);
+		meetingProposalFrame meetingProposal = new meetingProposalFrame(
+				this.name, meeting, this.kw);
 		meetingProposal.setVisible(true);
 	}
 
 	@Override
-	public void chooseMeetingTimeSlot(
+	public void chooseMeetingTimeSlot(UUID id,
 			Map<ImmutableDateRange, MeetingTimeSlot> slots) {
-		chooseMeetingtimeSlotFrame meetingTimeSlot = new chooseMeetingtimeSlotFrame(this.name, slots);
+		chooseMeetingtimeSlotFrame meetingTimeSlot = new chooseMeetingtimeSlotFrame(
+				this.name, id, slots, this.kw);
 		meetingTimeSlot.setVisible(true);
-		
+
+	}
+
+	@Override
+	public void createActivity(ImmutableDateRange immutableDateRange,
+			String description, UUID id) {
+		DefaultActivity activity = new DefaultActivity(immutableDateRange, id);
+		activity.setSummary(description);
+		ActivityDepository.getInstance(this.name).addBrokedActivity(
+				activity, this, TimeSpanListEvent.ADDED_CREATED);
+	}
+
+	@Override
+	public void activityMoved(ActivityMoveEvent arg0) {
+		// No activity could be moved		
+	}
+
+	@Override
+	public void activityDragResized(ActivityDragResizeEvent arg0) {
+		// No activity could be resized		
 	}
 }

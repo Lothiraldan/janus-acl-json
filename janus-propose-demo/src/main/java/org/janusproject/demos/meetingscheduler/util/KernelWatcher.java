@@ -78,4 +78,12 @@ public class KernelWatcher {
 		ChannelManager channelManager = k.getChannelManager();
 		return channelManager.getChannel(aaddress, MeetingChannel.class);
 	}
+
+	public List<String> getAgentsNames(List<AgentAddress> addresses) {
+		List<String> names = new ArrayList<String>();
+		for (AgentAddress address : addresses) {
+			names.add(address.getName());
+		}
+		return names;
+	}
 }

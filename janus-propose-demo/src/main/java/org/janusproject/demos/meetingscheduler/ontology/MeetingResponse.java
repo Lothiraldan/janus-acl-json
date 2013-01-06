@@ -12,12 +12,10 @@ public class MeetingResponse implements Serializable {
 	private static final long serialVersionUID = 2190746471098238663L;
 	private UUID id;
 	private Map<ImmutableDateRange, Integer> slots = new HashMap<ImmutableDateRange, Integer>();
-	private String who;
 
-	public MeetingResponse(Meeting meeting, String who) {
+	public MeetingResponse(Meeting meeting) {
 		super();
 		this.id = meeting.getId();
-		this.who = who;
 	}
 
 	public void addResponseDate(ImmutableDateRange date, Integer value) {
@@ -32,10 +30,6 @@ public class MeetingResponse implements Serializable {
 
 	public Map<ImmutableDateRange, Integer> getSlots() {
 		return slots;
-	}
-
-	public String getWho() {
-		return who;
 	}
 
 }

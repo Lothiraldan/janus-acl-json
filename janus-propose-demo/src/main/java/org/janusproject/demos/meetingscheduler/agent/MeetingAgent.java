@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.janusproject.acl.ACLAgent;
 import org.janusproject.acl.ACLMessage;
 import org.janusproject.acl.Performative;
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.ontology.MeetingConfirmation;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingManager;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
 import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
@@ -19,6 +21,8 @@ import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.channels.Channel;
 import org.janusproject.kernel.channels.ChannelInteractable;
 import org.janusproject.kernel.status.Status;
+
+import com.miginfocom.util.dates.ImmutableDateRange;
 
 public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 
@@ -56,8 +60,17 @@ public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 
 				if (meetingManager.hasAllResponses(meetingResponse.getId())) {
 					for (MeetingListener listener : listeners) {
-						listener.chooseMeetingTimeSlot(meetingManager.getSlots(meetingResponse.getId()));
+						listener.chooseMeetingTimeSlot(
+								meetingResponse.getId(),
+								meetingManager.getSlots(meetingResponse.getId()));
 					}
+				}
+			} else if (performative == Performative.CONFIRM) {
+				MeetingConfirmation confirmation = (MeetingConfirmation) SerializationUtil
+						.decode(aMsg.getContent().getContent().toString());
+				for (MeetingListener listener : listeners) {
+					listener.createActivity(confirmation.getDateRange(),
+							confirmation.getDescription(), confirmation.getId());
 				}
 			}
 		}
@@ -108,6 +121,25 @@ public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 					new ACLMessage(SerializationUtil.encode(meetingResponse),
 							Performative.ACCEPT_PROPOSAL),
 					(AgentAddress) address);
+		}
+
+		@Override
+		public void confirmMeeting(UUID id,
+				ImmutableDateRange immutableDateRange) {
+			String description = MeetingAgent.this.meetingManager
+					.getDescription(id);
+			for (MeetingListener listener : MeetingAgent.this.listeners) {
+				listener.createActivity(immutableDateRange, description, id);
+			}
+			for (AgentAddress address : MeetingAgent.this.meetingManager
+					.getSlots(id).get(immutableDateRange).getParticipants()) {
+				MeetingAgent.this.sendACLMessage(
+						new ACLMessage(SerializationUtil
+								.encode(new MeetingConfirmation(
+										immutableDateRange, description, id)),
+								Performative.CONFIRM), address);
+			}
+
 		}
 	}
 

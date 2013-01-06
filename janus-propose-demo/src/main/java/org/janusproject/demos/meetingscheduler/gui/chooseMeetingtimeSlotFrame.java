@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -20,6 +21,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
+import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
@@ -30,10 +32,16 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 	private Map<ImmutableDateRange, MeetingTimeSlot> slots;
 	private Vector<Vector<Object>> data;
 	private JTable slotsTable;
+	private KernelWatcher kw;
+	private String who;
+	private UUID id;
 
-	public chooseMeetingtimeSlotFrame(String who,
-			Map<ImmutableDateRange, MeetingTimeSlot> slots) {
+	public chooseMeetingtimeSlotFrame(String who, UUID id,
+			Map<ImmutableDateRange, MeetingTimeSlot> slots, KernelWatcher kw) {
 		this.slots = slots;
+		this.id = id;
+		this.kw = kw;
+		this.who = who;
 		setTitle(who + " choose meeting slot");
 
 		Container contentPane = this.getContentPane();
@@ -61,7 +69,7 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 			if (value.hasAllParticipants()) {
 				row.add("All participants");
 			} else {
-				row.add(value.getParticipants().toString());
+				row.add(this.kw.getAgentsNames(value.getParticipants()));
 			}
 			data.add(row);
 		}
@@ -84,7 +92,17 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		String cmd = e.getActionCommand();
+		if (cmd == "SUBMIT") {
+			int selectedRow = slotsTable.getSelectedRow();
+			if (selectedRow == -1) {
+				return;
+			}
+			this.kw.getChannel(this.who).confirmMeeting(
+					this.id,
+					(ImmutableDateRange) data.get(selectedRow).get(0));
+			this.dispose();
+		}
 
 	}
 

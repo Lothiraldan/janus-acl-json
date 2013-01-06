@@ -98,7 +98,7 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		String cmd = evt.getActionCommand();
 		if (cmd == "SUBMIT") {
-			MeetingResponse meetingResponse = new MeetingResponse(meeting, this.who);
+			MeetingResponse meetingResponse = new MeetingResponse(meeting);
 			for (int i = 0; i < propList.getModel().getRowCount(); i++) {
 				meetingResponse.addResponseDate((ImmutableDateRange) data
 						.get(i).get(0), Integer.parseInt((String) propList.getModel().getValueAt(i, 1)));

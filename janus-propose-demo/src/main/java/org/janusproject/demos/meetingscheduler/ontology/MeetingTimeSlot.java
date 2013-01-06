@@ -3,19 +3,21 @@ package org.janusproject.demos.meetingscheduler.ontology;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.janusproject.kernel.address.AgentAddress;
+
 public class MeetingTimeSlot {
 	private Integer value;
-	private List<String> participants;
+	private List<AgentAddress> participants;
 	private Integer participantsSize;
 
 	public MeetingTimeSlot(int size) {
 		super();
 		this.participantsSize = size;
 		this.value = 0;
-		this.participants = new ArrayList<String>();
+		this.participants = new ArrayList<AgentAddress>();
 	}
 
-	public void processResponse(String participant, int value) {
+	public void processResponse(AgentAddress participant, int value) {
 		this.participants.add(participant);
 		this.value += value;
 	}
@@ -28,7 +30,7 @@ public class MeetingTimeSlot {
 		return this.participants.size() == this.participantsSize;
 	}
 
-	public List<String> getParticipants() {
+	public List<AgentAddress> getParticipants() {
 		return participants;
 	}
 
