@@ -100,6 +100,8 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 			}
 		});
 
+		dayDateArea.setActivityDepositoryContext(this.name);
+		monthDateArea.setActivityDepositoryContext(this.name);
 		currentDateArea.setActivityDepositoryContext(this.name);
 
 		// Listener
