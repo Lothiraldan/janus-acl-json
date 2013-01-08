@@ -51,7 +51,7 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 		columnNames.add("Participants");
 
 		data = new Vector<Vector<Object>>();
-
+	
 		for (Entry<ImmutableDateRange, MeetingTimeSlot> entry : this.slots
 				.entrySet()) {
 			Vector<Object> row = new Vector<Object>();
