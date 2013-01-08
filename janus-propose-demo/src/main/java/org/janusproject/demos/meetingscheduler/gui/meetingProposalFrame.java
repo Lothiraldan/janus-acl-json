@@ -33,6 +33,7 @@ import javax.swing.table.TableColumn;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
+import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.activity.ActivityDepository;
@@ -74,14 +75,11 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 
 		ActivityList existingActivites = depository.getActivities();
 		
-		
-	    
-
 		for (ImmutableDateRange date : meeting.getDates()) {
 			if (!existingActivites
 					.hasOverlapping(date.getDateRangeForReading())) {
 				Vector<Object> row = new Vector<Object>();
-				row.add(date);
+				row.add(DateRangeUtil.dateToHumanFriendly(date));
 				row.add(1);
 				data.add(row);
 			}
@@ -92,6 +90,8 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	    TableColumn col = propList.getColumnModel().getColumn(1);
 	    col.setCellRenderer(new SpinnerEditor());
 	    col.setCellEditor(new SpinnerEditor());
+	    col.setMinWidth(20);
+	    col.setMaxWidth(20);
 	    
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
@@ -103,8 +103,12 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		JLabel meetingDescription = new JLabel(meeting.getDescription());
 
 		JScrollPane scrollPane = new JScrollPane(propList);
-		panel.add(meetingDescription, BorderLayout.NORTH);
-		panel.add(descLabel, BorderLayout.NORTH);
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.Y_AXIS));
+		northPanel.add(descLabel);
+		northPanel.add(meetingDescription);
+		
+		panel.add(northPanel, BorderLayout.NORTH);
 		panel.add(submitButton, BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.add(panel);
@@ -157,4 +161,4 @@ class SpinnerEditor extends AbstractCellEditor implements TableCellRenderer,Tabl
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		return spinner;
 	}
-	}
+}

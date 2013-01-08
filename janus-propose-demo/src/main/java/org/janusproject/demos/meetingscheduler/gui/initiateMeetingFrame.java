@@ -1,6 +1,7 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -31,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
+import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.DatePicker;
@@ -99,6 +102,8 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 				suggestedHoursListModel);
 		selectedHoursList = new JList<ImmutableDateRange>(
 				selectedHoursListModel);
+		
+		suggestedHoursList.setCellRenderer(new DateRangeListCellRenderer());
 
 		JPanel list_left = new JPanel();
 		list_left.setLayout(new BoxLayout(list_left, BoxLayout.Y_AXIS));
@@ -150,7 +155,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 	private JComponent createDatePickerPanel() {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 5));
 		panel.setBorder(new CompoundBorder(new TitledBorder(
-				"Date Pickers that only differs by the Theme set"),
+				"Select a date for the meeting"),
 				new EmptyBorder(10, 10, 10, 10)));
 
 		datePicker = new ThemeDatePicker(DP_THEME_CTX1);
@@ -193,6 +198,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 			if (!existingActivites
 					.hasOverlapping(date.getDateRangeForReading())) {
 				suggestedHoursListModel.addElement(date);
+				
 			}
 		}
 	}
@@ -265,4 +271,24 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 		this.refreshSlotList();
 	}
 
+}
+
+class DateRangeListCellRenderer extends DefaultListCellRenderer
+{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8197602968331988703L;
+
+	public Component getListCellRendererComponent(
+        JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+    {
+         JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+         
+         ImmutableDateRange date = (ImmutableDateRange) value;
+       label.setText("From "+date.getStart().getTime()+" to "+date.getEnd().getTime());
+
+       return label;
+
+    }
 }
