@@ -1,14 +1,12 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
@@ -22,10 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -46,6 +41,7 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	private JTable propList;
 	private ActivityDepository depository;
 	private Vector<Vector<Object>> data;
+	private List<ImmutableDateRange> ranges;
 	private Meeting meeting;
 	private KernelWatcher kw;
 	private String who;
@@ -72,9 +68,10 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		columnNames.add("Rank");
 
 		data = new Vector<Vector<Object>>();
+		ranges = new ArrayList<ImmutableDateRange>();
 
 		ActivityList existingActivites = depository.getActivities();
-		
+
 		for (ImmutableDateRange date : meeting.getDates()) {
 			if (!existingActivites
 					.hasOverlapping(date.getDateRangeForReading())) {
@@ -82,17 +79,18 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 				row.add(DateRangeUtil.dateToHumanFriendly(date));
 				row.add(1);
 				data.add(row);
+				ranges.add(date);
 			}
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 		propList = new JTable(model);
 
-	    TableColumn col = propList.getColumnModel().getColumn(1);
-	    col.setCellRenderer(new SpinnerEditor());
-	    col.setCellEditor(new SpinnerEditor());
-	    col.setMinWidth(20);
-	    col.setMaxWidth(20);
-	    
+		TableColumn col = propList.getColumnModel().getColumn(1);
+		col.setCellRenderer(new SpinnerEditor());
+		col.setCellEditor(new SpinnerEditor());
+		col.setMinWidth(50);
+		col.setMaxWidth(50);
+
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
 		submitButton.addActionListener(this);
@@ -104,10 +102,10 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 
 		JScrollPane scrollPane = new JScrollPane(propList);
 		JPanel northPanel = new JPanel();
-		northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.Y_AXIS));
+		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
 		northPanel.add(descLabel);
 		northPanel.add(meetingDescription);
-		
+
 		panel.add(northPanel, BorderLayout.NORTH);
 		panel.add(submitButton, BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
@@ -122,8 +120,8 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		if (cmd == "SUBMIT") {
 			MeetingResponse meetingResponse = new MeetingResponse(meeting);
 			for (int i = 0; i < propList.getModel().getRowCount(); i++) {
-				meetingResponse.addResponseDate((ImmutableDateRange) data
-						.get(i).get(0), Integer.parseInt((String) propList.getModel().getValueAt(i, 1)));
+				meetingResponse.addResponseDate(ranges.get(i),
+						(Integer) propList.getModel().getValueAt(i, 1));
 			}
 			this.kw.getChannel(this.who).responseMeeting(meetingResponse);
 			this.dispose();
@@ -131,30 +129,33 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 	}
 }
 
-class SpinnerEditor extends AbstractCellEditor implements TableCellRenderer,TableCellEditor {
-	  final JSpinner spinner = new JSpinner();
+class SpinnerEditor extends AbstractCellEditor implements TableCellRenderer,
+		TableCellEditor {
 
-	  public SpinnerEditor() {
-	    spinner.setModel(new SpinnerNumberModel(1, 0, 5, 1));
-	  }
+	private static final long serialVersionUID = 1L;
+	final JSpinner spinner = new JSpinner();
 
-	  public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
-	      int row, int column) {
-		  System.out.println(value.getClass());
-	    spinner.setValue(value);
-	    return spinner;
-	  }
+	public SpinnerEditor() {
+		spinner.setModel(new SpinnerNumberModel(1, 0, 5, 1));
+	}
 
-	  public boolean isCellEditable(EventObject evt) {
-	    if (evt instanceof MouseEvent) {
-	      return ((MouseEvent) evt).getClickCount() >= 2;
-	    }
-	    return true;
-	  }
+	public Component getTableCellEditorComponent(JTable table, Object value,
+			boolean isSelected, int row, int column) {
+		System.out.println(value.getClass());
+		spinner.setValue(value);
+		return spinner;
+	}
 
-	  public Object getCellEditorValue() {
-	    return spinner.getValue();
-	  }
+	public boolean isCellEditable(EventObject evt) {
+		if (evt instanceof MouseEvent) {
+			return ((MouseEvent) evt).getClickCount() >= 2;
+		}
+		return true;
+	}
+
+	public Object getCellEditorValue() {
+		return spinner.getValue();
+	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
