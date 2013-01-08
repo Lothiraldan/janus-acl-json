@@ -27,15 +27,19 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		Map<String, Object> output = new HashMap<String, Object>();
 
 		// Performative
-		output.put(Locale.getString(JSONACLCodec.class, "PERFORMATIVE"), aMsg.getPerformative().ordinal());
+		output.put(Locale.getString(JSONACLCodec.class, "PERFORMATIVE"), aMsg
+				.getPerformative().ordinal());
 
 		// Display SENDER
 		AgentAddress sender = aMsg.getSender();
 		if (sender != null) {
 			Map<String, String> sender_infos = new HashMap<String, String>();
-			sender_infos.put(Locale.getString(JSONACLCodec.class, "NAME"), sender.getName());
-			sender_infos.put(Locale.getString(JSONACLCodec.class, "ID"), sender.getUUID().toString());
-			output.put(Locale.getString(JSONACLCodec.class, "SENDER"), sender_infos);
+			sender_infos.put(Locale.getString(JSONACLCodec.class, "NAME"),
+					sender.getName());
+			sender_infos.put(Locale.getString(JSONACLCodec.class, "ID"), sender
+					.getUUID().toString());
+			output.put(Locale.getString(JSONACLCodec.class, "SENDER"),
+					sender_infos);
 		}
 
 		// Display RECEIVERS
@@ -45,33 +49,42 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		if (receivers != null) {
 			for (AgentAddress receiver : receivers) {
 				Map<String, String> receiver_info = new HashMap<String, String>();
-				receiver_info.put(Locale.getString(JSONACLCodec.class, "NAME"), receiver.getName());
-				receiver_info.put(Locale.getString(JSONACLCodec.class, "ID"), receiver.getUUID().toString());
+				receiver_info.put(Locale.getString(JSONACLCodec.class, "NAME"),
+						receiver.getName());
+				receiver_info.put(Locale.getString(JSONACLCodec.class, "ID"),
+						receiver.getUUID().toString());
 				receivers_infos.add(receiver_info);
 			}
-			output.put(Locale.getString(JSONACLCodec.class, "RECEIVERS"), receivers_infos);
+			output.put(Locale.getString(JSONACLCodec.class, "RECEIVERS"),
+					receivers_infos);
 		}
 
 		// Display CONTENT
 		String content = aMsg.getContent().getContent().toString();
 		if (content != null && content.length() > 0) {
-			output.put(Locale.getString(JSONACLCodec.class, "CONTENT"), content.trim());
+			output.put(Locale.getString(JSONACLCodec.class, "CONTENT"),
+					content.trim());
 		}
 
 		// Display ENCODING
-		output.put(Locale.getString(JSONACLCodec.class, "ENCODING"), aMsg.getEncoding());
+		output.put(Locale.getString(JSONACLCodec.class, "ENCODING"),
+				aMsg.getEncoding());
 
 		// Display LANGUAGE
-		output.put(Locale.getString(JSONACLCodec.class, "LANGUAGE"), aMsg.getLanguage());
+		output.put(Locale.getString(JSONACLCodec.class, "LANGUAGE"),
+				aMsg.getLanguage());
 
 		// Display ONTOLOGY
-		output.put(Locale.getString(JSONACLCodec.class, "ONTOLOGY"), aMsg.getOntology());
+		output.put(Locale.getString(JSONACLCodec.class, "ONTOLOGY"),
+				aMsg.getOntology());
 
 		// Display PROTOCOL
-		output.put(Locale.getString(JSONACLCodec.class, "PROTOCOL"), aMsg.getProtocol().getName());
+		output.put(Locale.getString(JSONACLCodec.class, "PROTOCOL"), aMsg
+				.getProtocol().getName());
 
 		// Display CONVERSATION ID
-		output.put(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"), aMsg.getConversationId());
+		output.put(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"),
+				aMsg.getConversationId());
 
 		return fromMap(output);
 	}
@@ -83,24 +96,29 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		Map<String, Object> json = fromBytes(byteMsg);
 
 		// PERFORMATIVE
-		content.setPerformative((Integer) json.get(Locale.getString(JSONACLCodec.class, "PERFORMATIVE")));
+		content.setPerformative((Integer) json.get(Locale.getString(
+				JSONACLCodec.class, "PERFORMATIVE")));
 
 		// SENDER
 		if (json.containsKey(Locale.getString(JSONACLCodec.class, "SENDER"))) {
-			String sender_id = (String) ((Map<String, Object>) json
-					.get(Locale.getString(JSONACLCodec.class, "SENDER"))).get(Locale.getString(JSONACLCodec.class, "ID"));
+			@SuppressWarnings("unchecked")
+			String sender_id = (String) ((Map<String, Object>) json.get(Locale
+					.getString(JSONACLCodec.class, "SENDER"))).get(Locale
+					.getString(JSONACLCodec.class, "ID"));
 			content.setSender(AddressUtil.createAgentAddress(UUID
 					.fromString(sender_id)));
 		}
 
 		// RECEIVERS
 		if (json.containsKey(Locale.getString(JSONACLCodec.class, "RECEIVERS"))) {
+			@SuppressWarnings("unchecked")
 			ArrayList<Map<String, Object>> json_receivers = (ArrayList<Map<String, Object>>) json
 					.get(Locale.getString(JSONACLCodec.class, "RECEIVERS"));
 			Collection<AgentAddress> receivers = new ArrayList<AgentAddress>();
 
 			for (int i = 0; i < json_receivers.size(); i++) {
-				String receiver_info = (String) json_receivers.get(i).get(Locale.getString(JSONACLCodec.class, "ID"));
+				String receiver_info = (String) json_receivers.get(i).get(
+						Locale.getString(JSONACLCodec.class, "ID"));
 				receivers.add(AddressUtil.createAgentAddress(UUID
 						.fromString(receiver_info)));
 			}
@@ -109,31 +127,39 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 
 		// CONTENT
 		if (json.containsKey(Locale.getString(JSONACLCodec.class, "CONTENT"))) {
-			content.setContent(new StringBuffer((String) json.get(Locale.getString(JSONACLCodec.class, "CONTENT"))));
+			content.setContent(new StringBuffer((String) json.get(Locale
+					.getString(JSONACLCodec.class, "CONTENT"))));
 		}
 
 		// ENCODING
-		content.setEncoding((String) json.get(Locale.getString(JSONACLCodec.class, "ENCODING")));
+		content.setEncoding((String) json.get(Locale.getString(
+				JSONACLCodec.class, "ENCODING")));
 
 		// LANGUAGE
 		if (json.containsKey(Locale.getString(JSONACLCodec.class, "LANGUAGE"))) {
-			content.setLanguage((String) json.get(Locale.getString(JSONACLCodec.class, "LANGUAGE")));
+			content.setLanguage((String) json.get(Locale.getString(
+					JSONACLCodec.class, "LANGUAGE")));
 		}
 
 		// ONTOLOGY
 		if (json.containsKey(Locale.getString(JSONACLCodec.class, "ONTOLOGY"))) {
-			content.setOntology((String) json.get(Locale.getString(JSONACLCodec.class, "ONTOLOGY")));
+			content.setOntology((String) json.get(Locale.getString(
+					JSONACLCodec.class, "ONTOLOGY")));
 		}
 
 		// PROTOCOL
-		content.setProtocol((String) json.get(Locale.getString(JSONACLCodec.class, "PROTOCOL")));
+		content.setProtocol((String) json.get(Locale.getString(
+				JSONACLCodec.class, "PROTOCOL")));
 
 		// CONVERSATION ID
-		if (json.containsKey(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"))
-				&& json.get(Locale.getString(JSONACLCodec.class, "CONVERSATIONID")) != null) {
+		if (json.containsKey(Locale.getString(JSONACLCodec.class,
+				"CONVERSATIONID"))
+				&& json.get(Locale.getString(JSONACLCodec.class,
+						"CONVERSATIONID")) != null) {
 
 			try {
-				String uuid = (String) json.get(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"));
+				String uuid = (String) json.get(Locale.getString(
+						JSONACLCodec.class, "CONVERSATIONID"));
 				content.setConversationId(UUID.fromString(uuid));
 			} catch (IllegalArgumentException e) {
 				content.setConversationId(null);
@@ -142,7 +168,7 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 
 		return content;
 	}
-	
+
 	protected ObjectMapper getMapper() {
 		return new ObjectMapper();
 	}
