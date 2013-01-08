@@ -57,14 +57,14 @@ public class FipaProposeProtocol extends AbstractFipaProtocol {
 	}
 
 	/**
-	 * Send a propose to the participant. This method must be called by the
+	 * Send a proposal to the participant. This method must be called by the
 	 * initiator.
 	 * 
 	 * @param content
 	 */
 	public void propose(Object content) {
 		if (isInitiator() && (getState() == ProposeProtocolState.NOT_STARTED)) {
-			sendMessage(content, Performative.REQUEST, getParticipants().get(0));
+			sendMessage(content, Performative.PROPOSE, getParticipants().get(0));
 			setState(ProposeProtocolState.WAITING_ANSWER);
 		} else if (isParticipant()) {
 			this.logger.log(Level.SEVERE,
@@ -76,7 +76,7 @@ public class FipaProposeProtocol extends AbstractFipaProtocol {
 	}
 
 	/**
-	 * Looks if there is a pending propose in the mailbox
+	 * Looks if there is a pending proposal in the mailbox
 	 * 
 	 * @return ProtocolResult the result
 	 */
@@ -342,12 +342,9 @@ public class FipaProposeProtocol extends AbstractFipaProtocol {
 
 		ACLMessage message = new ACLMessage(content, performative);
 
-		message.setProtocol(EnumFipaProtocol.FIPA_REQUEST);
+		message.setProtocol(EnumFipaProtocol.FIPA_PROPOSE);
 		message.setConversationId(getConversationId());
 
 		getRefAclAgent().sendACLMessage(message, to);
-
-		// System.out.println("\n=> MESSAGE envoyé via REQUEST PROTOCOL : \n" +
-		// message.toString());
 	}
 }
