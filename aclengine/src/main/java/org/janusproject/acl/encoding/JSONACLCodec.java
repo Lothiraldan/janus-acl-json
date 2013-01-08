@@ -83,8 +83,11 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 				.getProtocol().getName());
 
 		// Display CONVERSATION ID
-		output.put(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"),
-				aMsg.getConversationId());
+		UUID conversationId = aMsg.getConversationId();
+		if (conversationId != null) {
+			output.put(Locale.getString(JSONACLCodec.class, "CONVERSATIONID"),
+					aMsg.getConversationId().toString());
+		}
 
 		return fromMap(output);
 	}
