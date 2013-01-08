@@ -10,9 +10,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>propose-protocol</artifactId>
+	<artifactId>meeting-scheduler</artifactId>
 	<packaging>jar</packaging>
-	<name>Propose Protocol ACL Janus demo</name>
+	<name>Meeting Scheduler ACL Janus demo</name>
 	<inceptionYear>2012</inceptionYear>
 
 	<build>
@@ -110,7 +110,7 @@
 			<artifactId>org.apache.felix.main</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.arakhne.afc</groupId>
 			<artifactId>arakhneText</artifactId>
