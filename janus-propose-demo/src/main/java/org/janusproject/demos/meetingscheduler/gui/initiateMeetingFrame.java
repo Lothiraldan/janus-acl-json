@@ -233,25 +233,34 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 
 	@Override
 	public void dateRangeChanged(DateChangeEvent e) {
+		ImmutableDateRange range = null;
+
 		if (e.getType() == DateChangeEvent.PRESSED) {
-			ImmutableDateRange range = e.getNewRange();
-
-			DefaultListModel<ImmutableDateRange> data = new DefaultListModel<ImmutableDateRange>();
-
-			ActivityList existingActivites = depository.getActivities();
-
-			@SuppressWarnings("unchecked")
-			Iterator<ImmutableDateRange> x = range.iterator(
-					DateRange.RANGE_TYPE_HOUR, 2);
-			while (x.hasNext()) {
-				ImmutableDateRange date = x.next();
-				if (!existingActivites.hasOverlapping(date.getDateRangeForReading())) {
-					data.addElement(date);
-				}
-			}
-			hoursList.removeAll();
-			hoursList.setModel(data);
+			range = e.getNewRange();
+		} else if (e.getType() == DateChangeEvent.SELECTED) {
+			range = e.getNewRange();
 		}
+
+		if (range == null) {
+			return;
+		}
+
+		DefaultListModel<ImmutableDateRange> data = new DefaultListModel<ImmutableDateRange>();
+
+		ActivityList existingActivites = depository.getActivities();
+
+		@SuppressWarnings("unchecked")
+		Iterator<ImmutableDateRange> x = range.iterator(
+				DateRange.RANGE_TYPE_HOUR, 2);
+		while (x.hasNext()) {
+			ImmutableDateRange date = x.next();
+			if (!existingActivites
+					.hasOverlapping(date.getDateRangeForReading())) {
+				data.addElement(date);
+			}
+		}
+		hoursList.removeAll();
+		hoursList.setModel(data);
 	}
 
 }
