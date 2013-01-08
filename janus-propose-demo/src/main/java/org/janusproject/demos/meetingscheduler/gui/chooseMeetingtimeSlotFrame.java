@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -17,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;

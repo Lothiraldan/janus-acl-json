@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
-import org.janusproject.kernel.address.Address;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 

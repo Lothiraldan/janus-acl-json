@@ -3,22 +3,16 @@ package org.janusproject.demos.meetingscheduler.gui;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyVetoException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 
@@ -27,11 +21,8 @@ import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
 import org.janusproject.demos.meetingscheduler.role.MeetingListener;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
-import com.miginfocom.ashape.interaction.InteractionEvent;
-import com.miginfocom.ashape.interaction.InteractionListener;
 import com.miginfocom.beans.ActivityGridLayoutBean;
 import com.miginfocom.beans.DateAreaBean;
-import com.miginfocom.calendar.activity.Activity;
 import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityInteractor;
 import com.miginfocom.calendar.activity.DefaultActivity;
@@ -53,7 +44,6 @@ import com.miginfocom.util.dates.TimeSpanListEvent;
 import com.miginfocom.util.gfx.geometry.AbsRect;
 import com.miginfocom.util.gfx.geometry.numbers.AtEnd;
 import com.miginfocom.util.gfx.geometry.numbers.AtStart;
-import com.miginfocom.util.states.GenericStates;
 import com.miginfocom.util.states.ToolTipProvider;
 
 /**
@@ -110,6 +100,8 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 			}
 		});
 
+		dayDateArea.setActivityDepositoryContext(this.name);
+		monthDateArea.setActivityDepositoryContext(this.name);
 		currentDateArea.setActivityDepositoryContext(this.name);
 
 		// Listener
