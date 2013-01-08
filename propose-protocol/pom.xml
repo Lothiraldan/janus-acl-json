@@ -83,10 +83,10 @@
 			<artifactId>aclengine</artifactId>
 		</dependency>
 
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.janus-project.kernel</groupId>
 			<artifactId>osgi</artifactId>
-		</dependency> -->
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.felix</groupId>
