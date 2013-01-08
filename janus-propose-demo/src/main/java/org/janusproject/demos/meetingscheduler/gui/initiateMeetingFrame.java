@@ -14,9 +14,11 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -161,7 +163,7 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 		panel.add(new JLabel("Number of hours of the meeting"));
 		this.hoursSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
 		this.hoursSpinner.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				refreshSlotList();
@@ -200,9 +202,30 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 		String cmd = evt.getActionCommand();
 		if (cmd == "SENDMEETING") {
 			List<String> participants = participantList.getSelectedValuesList();
+			if (participants.size() == 0) {
+				JOptionPane.showMessageDialog(this,
+						"You must choose at least one participant", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
 			List<ImmutableDateRange> hours = Collections
 					.list(selectedHoursListModel.elements());
+			if (hours.size() == 0) {
+				JOptionPane.showMessageDialog(this,
+						"You must choose at least one time slot", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			String description = description_field.getText();
+			if (description.equals("")) {
+				JOptionPane.showMessageDialog(this,
+						"You must choose a description for the meeting", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
 			Meeting meeting = new Meeting(this.initiator_name, hours,
 					description);
 			this.kw.getChannel(this.initiator_name).createMeeting(meeting,
