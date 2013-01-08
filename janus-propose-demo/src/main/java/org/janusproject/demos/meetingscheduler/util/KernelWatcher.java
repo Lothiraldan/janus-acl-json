@@ -7,8 +7,6 @@ import org.janusproject.demos.meetingscheduler.role.MeetingChannel;
 import org.janusproject.kernel.Kernel;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.agent.ChannelManager;
-import org.janusproject.kernel.crio.core.AddressUtil;
-import org.janusproject.kernel.crio.core.GroupAddress;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
 
 public class KernelWatcher {

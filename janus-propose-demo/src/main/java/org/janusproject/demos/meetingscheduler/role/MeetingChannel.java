@@ -3,8 +3,6 @@ package org.janusproject.demos.meetingscheduler.role;
 import java.util.List;
 import java.util.UUID;
 
-import javax.swing.event.ChangeListener;
-
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
 import org.janusproject.kernel.address.AgentAddress;
