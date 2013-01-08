@@ -1,13 +1,19 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,11 +22,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.ontology.MeetingResponse;
+import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.activity.ActivityDepository;
@@ -61,21 +74,25 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		data = new Vector<Vector<Object>>();
 
 		ActivityList existingActivites = depository.getActivities();
-
+		
 		for (ImmutableDateRange date : meeting.getDates()) {
 			if (!existingActivites
 					.hasOverlapping(date.getDateRangeForReading())) {
 				Vector<Object> row = new Vector<Object>();
-				row.add(date);
-				// row.add(new JSpinner(new SpinnerNumberModel(0, 0, 10, 1)));
-				row.add("");
+				row.add(DateRangeUtil.dateToHumanFriendly(date));
+				row.add(1);
 				data.add(row);
 			}
 		}
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-
 		propList = new JTable(model);
 
+	    TableColumn col = propList.getColumnModel().getColumn(1);
+	    col.setCellRenderer(new SpinnerEditor());
+	    col.setCellEditor(new SpinnerEditor());
+	    col.setMinWidth(20);
+	    col.setMaxWidth(20);
+	    
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");
 		submitButton.addActionListener(this);
@@ -86,11 +103,16 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		JLabel meetingDescription = new JLabel(meeting.getDescription());
 
 		JScrollPane scrollPane = new JScrollPane(propList);
-		panel.add(meetingDescription, BorderLayout.NORTH);
-		panel.add(descLabel, BorderLayout.NORTH);
+		JPanel northPanel = new JPanel();
+		northPanel.setLayout(new BoxLayout(northPanel,BoxLayout.Y_AXIS));
+		northPanel.add(descLabel);
+		northPanel.add(meetingDescription);
+		
+		panel.add(northPanel, BorderLayout.NORTH);
 		panel.add(submitButton, BorderLayout.SOUTH);
 		panel.add(scrollPane, BorderLayout.CENTER);
 		this.add(panel);
+		this.pack();
 		this.setVisible(true);
 	}
 
@@ -106,5 +128,37 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 			this.kw.getChannel(this.who).responseMeeting(meetingResponse);
 			this.dispose();
 		}
+	}
+}
+
+class SpinnerEditor extends AbstractCellEditor implements TableCellRenderer,TableCellEditor {
+	  final JSpinner spinner = new JSpinner();
+
+	  public SpinnerEditor() {
+	    spinner.setModel(new SpinnerNumberModel(1, 0, 5, 1));
+	  }
+
+	  public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
+	      int row, int column) {
+		  System.out.println(value.getClass());
+	    spinner.setValue(value);
+	    return spinner;
+	  }
+
+	  public boolean isCellEditable(EventObject evt) {
+	    if (evt instanceof MouseEvent) {
+	      return ((MouseEvent) evt).getClickCount() >= 2;
+	    }
+	    return true;
+	  }
+
+	  public Object getCellEditorValue() {
+	    return spinner.getValue();
+	  }
+
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		return spinner;
 	}
 }
