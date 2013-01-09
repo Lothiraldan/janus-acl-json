@@ -3,19 +3,28 @@ package org.janusproject.demos.meetingscheduler.util;
 import java.awt.Component;
 
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+
+/**
+ * 
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class DateRangeTableCellRenderer extends DefaultTableCellRenderer{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8197602968331988703L;
 
-	@SuppressWarnings("rawtypes")
 	public Component getTableCellRendererComponent(
 			JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column )
     {

@@ -19,9 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
-import org.janusproject.demos.meetingscheduler.util.DateRangeListCellRenderer;
 import org.janusproject.demos.meetingscheduler.util.DateRangeTableCellRenderer;
-import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.util.dates.ImmutableDateRange;

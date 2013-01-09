@@ -1,7 +1,6 @@
 package org.janusproject.demos.meetingscheduler.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -12,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -32,8 +30,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
-import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 import org.janusproject.demos.meetingscheduler.util.DateRangeListCellRenderer;
+import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.DatePicker;
 import com.miginfocom.calendar.ThemeDatePicker;
