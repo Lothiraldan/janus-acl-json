@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -87,7 +88,7 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 					.hasOverlapping(date.getDateRangeForReading())) {
 				Vector<Object> row = new Vector<Object>();
 				row.add(DateRangeUtil.dateToHumanFriendly(date));
-				row.add(1);
+				row.add("1");
 				data.add(row);
 				ranges.add(date);
 			}
@@ -96,8 +97,6 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		propList = new JTable(model);
 
 		TableColumn col = propList.getColumnModel().getColumn(1);
-		col.setCellRenderer(new SpinnerEditor());
-		col.setCellEditor(new SpinnerEditor());
 		col.setMinWidth(50);
 		col.setMaxWidth(50);
 
@@ -130,8 +129,23 @@ public class meetingProposalFrame extends JFrame implements ActionListener {
 		if (cmd == "SUBMIT") {
 			MeetingResponse meetingResponse = new MeetingResponse(meeting);
 			for (int i = 0; i < propList.getModel().getRowCount(); i++) {
-				meetingResponse.addResponseDate(ranges.get(i),
-						(Integer) propList.getModel().getValueAt(i, 1));
+				int rank=0;
+				try{
+					rank=Integer.parseInt((String) propList.getModel().getValueAt(i, 1));
+				}catch(NumberFormatException e){
+					JOptionPane.showMessageDialog(this,
+							"You must integer as rank", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				System.out.println(rank);
+				if(rank<0 || rank>5){
+					JOptionPane.showMessageDialog(this,
+							"Rank should be an integer between 1 and 5", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}else{
+					meetingResponse.addResponseDate(ranges.get(i),rank);
+				}
 			}
 			this.kw.getChannel(this.who).responseMeeting(meetingResponse);
 			this.dispose();
