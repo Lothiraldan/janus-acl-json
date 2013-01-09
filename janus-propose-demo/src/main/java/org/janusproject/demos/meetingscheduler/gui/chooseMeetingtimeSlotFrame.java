@@ -16,8 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
+import org.janusproject.demos.meetingscheduler.util.DateRangeListCellRenderer;
+import org.janusproject.demos.meetingscheduler.util.DateRangeTableCellRenderer;
 import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
@@ -71,7 +74,7 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 		for (Entry<ImmutableDateRange, MeetingTimeSlot> entry : this.slots
 				.entrySet()) {
 			Vector<Object> row = new Vector<Object>();
-			row.add(DateRangeUtil.dateToHumanFriendly(entry.getKey()));
+			row.add(entry.getKey());
 			MeetingTimeSlot value = entry.getValue();
 			row.add(value.getValue());
 			if (value.hasAllParticipants()) {
@@ -86,6 +89,8 @@ public class chooseMeetingtimeSlotFrame extends JFrame implements
 
 		slotsTable = new JTable(model);
 		slotsTable.setAutoCreateRowSorter(true);
+		TableColumn col = slotsTable.getColumnModel().getColumn(0);
+		col.setCellRenderer(new DateRangeTableCellRenderer());
 
 		JButton submitButton = new JButton("Submit");
 		submitButton.setActionCommand("SUBMIT");

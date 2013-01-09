@@ -33,6 +33,7 @@ import javax.swing.event.ChangeListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
+import org.janusproject.demos.meetingscheduler.util.DateRangeListCellRenderer;
 
 import com.miginfocom.calendar.DatePicker;
 import com.miginfocom.calendar.ThemeDatePicker;
@@ -281,23 +282,3 @@ public class initiateMeetingFrame extends JFrame implements ActionListener,
 
 }
 
-class DateRangeListCellRenderer extends DefaultListCellRenderer
-{
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8197602968331988703L;
-
-	@SuppressWarnings("rawtypes")
-	public Component getListCellRendererComponent(
-        JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-    {
-         JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-         
-         ImmutableDateRange date = (ImmutableDateRange) value;
-       label.setText("From "+date.getStart().getTime()+" to "+date.getEnd().getTime());
-
-       return label;
-
-    }
-}
