@@ -47,14 +47,17 @@ import com.miginfocom.util.gfx.geometry.numbers.AtStart;
 import com.miginfocom.util.states.ToolTipProvider;
 
 /**
- * A demo of how to create a calendar that looks like iCal on the Mac.
- * <p>
- * The is a project for NetBeans that can be used directly.
+ * The main UI, show the meetings like OS X iCal.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
  */
 public class agentCalendarUI extends JFrame implements MeetingListener, ActivityMoveListener, ActivityDragResizeListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1366912984828214678L;
 
 	private transient DateAreaBean currentDateArea;

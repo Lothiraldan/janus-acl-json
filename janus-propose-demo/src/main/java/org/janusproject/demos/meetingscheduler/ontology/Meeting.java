@@ -6,6 +6,17 @@ import java.util.UUID;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The meeting object, sent as the proposal.
+ * Contains meeting id, meeting description and available time slots.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class Meeting implements Serializable {
 	
 	private String initiator;

@@ -8,6 +8,16 @@ import org.janusproject.demos.meetingscheduler.ontology.MeetingTimeSlot;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * Meeting Listener.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public interface MeetingListener {
 	public void incomingMeetingProposal(Meeting meeting);
 

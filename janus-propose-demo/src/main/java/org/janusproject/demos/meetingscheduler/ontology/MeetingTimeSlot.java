@@ -5,6 +5,16 @@ import java.util.List;
 
 import org.janusproject.kernel.address.AgentAddress;
 
+/**
+ * An utility object stored in MeetingManager
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class MeetingTimeSlot {
 	private Integer value;
 	private List<AgentAddress> participants;

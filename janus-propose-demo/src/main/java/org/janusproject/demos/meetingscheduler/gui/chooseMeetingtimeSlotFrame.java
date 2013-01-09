@@ -23,6 +23,16 @@ import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The Frame shown when all meeting responses have been received
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class chooseMeetingtimeSlotFrame extends JFrame implements
 		ActionListener {
 

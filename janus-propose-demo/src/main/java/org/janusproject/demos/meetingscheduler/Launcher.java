@@ -30,12 +30,10 @@ import org.janusproject.kernel.agent.Kernels;
 import org.janusproject.kernel.logger.LoggerUtil;
 
 /**
- * DEMO : Propose Protocol
+ * DEMO : Meeting Scheduler
  * 
- * @author $Author: madeline$
- * @author $Author: kleroy$
- * @author $Author: ptalagrand$
- * @author $Author: ngaud$
+ * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$

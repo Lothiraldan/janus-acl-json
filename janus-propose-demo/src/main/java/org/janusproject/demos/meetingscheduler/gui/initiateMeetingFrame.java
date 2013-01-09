@@ -44,6 +44,16 @@ import com.miginfocom.util.dates.DateChangeListener;
 import com.miginfocom.util.dates.DateRange;
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The UI shown for creating a new meeting.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class initiateMeetingFrame extends JFrame implements ActionListener,
 		DateChangeListener {
 

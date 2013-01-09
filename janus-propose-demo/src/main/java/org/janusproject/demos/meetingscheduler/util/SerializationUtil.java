@@ -8,6 +8,16 @@ import java.io.ObjectOutputStream;
 
 import org.arakhne.util.text.Base64Coder;
 
+/**
+ * 
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class SerializationUtil {
 	public static String encode(Object o) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

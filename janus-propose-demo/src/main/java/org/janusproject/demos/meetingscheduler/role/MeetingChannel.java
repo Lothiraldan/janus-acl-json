@@ -10,6 +10,16 @@ import org.janusproject.kernel.channels.Channel;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * Used to communicate between agent and UI.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public interface MeetingChannel extends Channel {
 
 	public void addMeetingListener(MeetingListener listener);

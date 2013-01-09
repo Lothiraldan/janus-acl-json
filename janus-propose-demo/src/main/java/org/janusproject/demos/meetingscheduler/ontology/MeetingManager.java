@@ -11,6 +11,16 @@ import org.janusproject.kernel.address.AgentAddress;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * An utility class, used to process meeting responses.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class MeetingManager {
 
 	Map<UUID, Address> initiatorsAddresses;

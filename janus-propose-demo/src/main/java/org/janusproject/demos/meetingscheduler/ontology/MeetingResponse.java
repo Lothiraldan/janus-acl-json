@@ -7,6 +7,17 @@ import java.util.UUID;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The message sent as the response with chosen time slots.
+ * Contains meeting id and time slots with preference.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class MeetingResponse implements Serializable {
 
 	private static final long serialVersionUID = 2190746471098238663L;

@@ -24,6 +24,16 @@ import org.janusproject.kernel.status.Status;
 
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The main agent class.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class MeetingAgent extends ACLAgent implements ChannelInteractable {
 
 	/**

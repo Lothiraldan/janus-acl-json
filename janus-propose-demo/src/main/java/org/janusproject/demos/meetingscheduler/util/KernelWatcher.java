@@ -9,6 +9,16 @@ import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.agent.ChannelManager;
 import org.janusproject.kernel.util.sizediterator.SizedIterator;
 
+/**
+ * 
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class KernelWatcher {
 
 	Kernel k;

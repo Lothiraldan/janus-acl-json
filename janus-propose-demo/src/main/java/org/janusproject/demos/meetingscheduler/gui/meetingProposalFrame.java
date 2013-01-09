@@ -35,6 +35,16 @@ import com.miginfocom.calendar.activity.ActivityDepository;
 import com.miginfocom.calendar.activity.ActivityList;
 import com.miginfocom.util.dates.ImmutableDateRange;
 
+/**
+ * The UI shown when a meeting proposal is received.
+ * 
+ * @author bfeld
+ * @author ngrenie
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ *
+ */
 public class meetingProposalFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -8269547358309700827L;
