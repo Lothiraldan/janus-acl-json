@@ -19,8 +19,21 @@ import org.janusproject.acl.ACLMessageContent;
 import org.janusproject.kernel.address.AgentAddress;
 import org.janusproject.kernel.crio.core.AddressUtil;
 
+/**
+ * This class encodes an ACLMessageContent in JSON or decodes
+ * an ACLMessageContent encoded in bytes to JSON
+ * 
+ * @author $Author: ngrenie$
+ * @author $Author: bfeld$
+ * @version $FullVersion$
+ * @mavengroupid $Groupid$
+ * @mavenartifactid $ArtifactId$
+ */
 public class JSONACLCodec implements ACLMessageContentEncodingService {
 
+	/**
+	 * Encodes a given ACL Message into an array of bytes.
+	 */
 	@Override
 	public byte[] encode(ACLMessage aMsg) {
 
@@ -92,6 +105,9 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		return fromMap(output);
 	}
 
+	/**
+	 * Decodes a given array of bytes supposed to correspond to the ACLMessageContent.
+	 */
 	@Override
 	public ACLMessageContent decode(byte[] byteMsg, Object... parameters) {
 		ACLMessage.Content content = new ACLMessage.Content();
@@ -172,10 +188,16 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		return content;
 	}
 
+	/**
+	 * Return JSON ObjectMapper, used to convert Map to JSON String
+	 */
 	protected ObjectMapper getMapper() {
 		return new ObjectMapper();
 	}
 
+	/**
+	 * Convert a Map to byte[] using getMapper
+	 */
 	private byte[] fromMap(Map<String, Object> m) {
 		ObjectMapper mapper = getMapper();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -195,6 +217,9 @@ public class JSONACLCodec implements ACLMessageContentEncodingService {
 		return baos.toByteArray();
 	}
 
+	/**
+	 * Convert a byte[] to Map using getMapper
+	 */
 	private Map<String, Object> fromBytes(byte[] byteMsg) {
 		ObjectMapper mapper = getMapper();
 		try {

@@ -23,15 +23,13 @@ package org.janusproject.acl.protocol.propose;
 import org.janusproject.acl.protocol.ProtocolState;
 
 /**
- * This enumeration describes all available states of the Request Protocol.
+ * This enumeration describes all available states of the Propose Protocol.
  * 
- * @see FipaRequestProtocol
+ * @see FipaProposeProtocol
  * @see ProtocolState
  * 
- * @author $Author: madeline$
- * @author $Author: kleroy$
- * @author $Author: ptalagrand$
- * @author $Author: ngaud$
+ * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$

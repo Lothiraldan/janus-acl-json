@@ -16,7 +16,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -33,7 +32,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.janusproject.demos.meetingscheduler.ontology.Meeting;
-import org.janusproject.demos.meetingscheduler.util.DateRangeUtil;
 import org.janusproject.demos.meetingscheduler.util.KernelWatcher;
 
 import com.miginfocom.calendar.DatePicker;
@@ -280,6 +278,7 @@ class DateRangeListCellRenderer extends DefaultListCellRenderer
 	 */
 	private static final long serialVersionUID = 8197602968331988703L;
 
+	@SuppressWarnings("rawtypes")
 	public Component getListCellRendererComponent(
         JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {

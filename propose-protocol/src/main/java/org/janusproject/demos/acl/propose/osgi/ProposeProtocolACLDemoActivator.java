@@ -43,6 +43,7 @@ import org.osgi.framework.BundleContext;
 /**
  * 
  * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$

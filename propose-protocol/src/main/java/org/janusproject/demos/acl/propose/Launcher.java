@@ -33,6 +33,7 @@ import org.janusproject.kernel.logger.LoggerUtil;
  * DEMO : Propose Protocol
  * 
  * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$

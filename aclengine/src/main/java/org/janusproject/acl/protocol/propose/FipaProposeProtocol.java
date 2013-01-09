@@ -35,7 +35,7 @@ import org.janusproject.kernel.address.AgentAddress;
 /**
  * Propose Interaction protocol.
  * 
- * @see <a href="http://www.fipa.org/specs/fipa00026/SC00026H.html">FIPA Request
+ * @see <a href="http://www.fipa.org/specs/fipa00036/SC00036H.html">FIPA Propose
  *      Interaction Protocol Specification</a>
  * 
  * @version $FullVersion$
@@ -45,7 +45,7 @@ import org.janusproject.kernel.address.AgentAddress;
 public class FipaProposeProtocol extends AbstractFipaProtocol {
 
 	/**
-	 * Creates a new Request Protocol for a given agent.
+	 * Creates a new Propose Protocol for a given agent.
 	 * <p>
 	 * The maximum number of participants is set to 2.
 	 * 

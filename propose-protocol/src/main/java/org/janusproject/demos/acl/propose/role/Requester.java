@@ -35,6 +35,7 @@ import org.janusproject.kernel.status.StatusFactory;
 /**
  * 
  * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$

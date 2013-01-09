@@ -28,6 +28,7 @@ import org.janusproject.kernel.crio.core.Organization;
 /**
  * 
  * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$

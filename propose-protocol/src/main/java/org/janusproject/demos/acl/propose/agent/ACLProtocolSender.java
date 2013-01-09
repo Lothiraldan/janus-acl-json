@@ -39,6 +39,7 @@ import org.janusproject.kernel.util.sizediterator.SizedIterator;
 /**
  * 
  * @author $Author: bfeld$
+ * @author $Author: ngrenie$
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$
