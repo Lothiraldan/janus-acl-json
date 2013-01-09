@@ -1,0 +1,6 @@
+org.janusproject.demos.meetingscheduler
+org.janusproject.demos.meetingscheduler.agent
+org.janusproject.demos.meetingscheduler.gui
+org.janusproject.demos.meetingscheduler.ontology
+org.janusproject.demos.meetingscheduler.role
+org.janusproject.demos.meetingscheduler.util
