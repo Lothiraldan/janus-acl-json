@@ -8,11 +8,13 @@ import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
 
@@ -54,13 +56,16 @@ import com.miginfocom.util.states.ToolTipProvider;
  * @version $FullVersion$
  * @mavengroupid $Groupid$
  * @mavenartifactid $ArtifactId$
- *
+ * 
  */
-public class agentCalendarUI extends JFrame implements MeetingListener, ActivityMoveListener, ActivityDragResizeListener {
+public class agentCalendarUI extends JFrame implements MeetingListener,
+		ActivityMoveListener, ActivityDragResizeListener {
 
 	private static final long serialVersionUID = 1366912984828214678L;
 
 	private transient DateAreaBean currentDateArea;
+
+	private transient DefaultActivity newCreatedAct = null;
 
 	private ActivityGridLayoutBean activityGridLayoutBean = new ActivityGridLayoutBean();
 
@@ -164,14 +169,8 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 				rowColor, Grid.SIZE_MODE_INSIDE, false));
 
 		monthDateArea.getDateArea().setToolTipProvider(myTTP);
-		monthDateArea.addActivityMoveListener(this);
-		monthDateArea.addActivityDragResizeListener(this);
 		dayDateArea.getDateArea().setToolTipProvider(myTTP);
-		dayDateArea.addActivityMoveListener(this);
-		dayDateArea.addActivityDragResizeListener(this);
 		topDayArea.getDateArea().setToolTipProvider(myTTP);
-		topDayArea.addActivityMoveListener(this);
-		topDayArea.addActivityDragResizeListener(this);
 
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(weekButton);
@@ -922,6 +921,14 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 		dayDateArea.setVerticalGridLinePaintOdd(new java.awt.Color(204, 204,
 				204));
 		dayDateArea.setVerticalGridLineShowFirst(true);
+		dayDateArea
+				.addDateChangeListener(new com.miginfocom.util.dates.DateChangeListener() {
+					public void dateRangeChanged(
+							com.miginfocom.util.dates.DateChangeEvent evt) {
+						dayDateAreaDateRangeChanged(evt);
+					}
+				});
+
 		dayPanel.add(dayDateArea, java.awt.BorderLayout.CENTER);
 
 		mainParentPanel.add(dayPanel, "day");
@@ -1098,6 +1105,27 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
+	private void dayDateAreaDateRangeChanged(
+			com.miginfocom.util.dates.DateChangeEvent evt)// GEN-FIRST:event_dayDateAreaDateRangeChanged
+	{// GEN-HEADEREND:event_dayDateAreaDateRangeChanged
+		// This is the code that creates an activity by dragging in the day/days
+		// date area.
+		if (evt.getType() == DateChangeEvent.PRESSED) {
+
+			if (newCreatedAct == null && evt.getNewRange().getMillisSpanned(false, false) > 45*60*1000) {
+				newCreatedAct = new DefaultActivity(evt.getNewRange(), new Long(new Random().nextLong()));
+				String summary = (String) JOptionPane.showInputDialog(this, "Choose a description for event");
+				newCreatedAct.setSummary(summary);
+				ActivityDepository.getInstance(dayDateArea.getActivityDepositoryContext()).addBrokedActivity(newCreatedAct, this, TimeSpanListEvent.ADDED_CREATED);
+			} else {
+				try {
+					newCreatedAct.setBaseDateRange(evt.getNewRange());
+				} catch (Exception ex) {}
+			}
+		}
+
+	}
+
 	protected void newMeetingButtonActionPerformed(ActionEvent evt) {
 		initiateMeetingFrame initmeetingFrame = new initiateMeetingFrame(name,
 				kw);
@@ -1244,17 +1272,17 @@ public class agentCalendarUI extends JFrame implements MeetingListener, Activity
 			String description, UUID id) {
 		DefaultActivity activity = new DefaultActivity(immutableDateRange, id);
 		activity.setSummary(description);
-		ActivityDepository.getInstance(this.name).addBrokedActivity(
-				activity, this, TimeSpanListEvent.ADDED_CREATED);
+		ActivityDepository.getInstance(this.name).addBrokedActivity(activity,
+				this, TimeSpanListEvent.ADDED_CREATED);
 	}
 
 	@Override
 	public void activityMoved(ActivityMoveEvent arg0) {
-		// No activity could be moved		
+		// No activity could be moved
 	}
 
 	@Override
 	public void activityDragResized(ActivityDragResizeEvent arg0) {
-		// No activity could be resized		
+		// No activity could be resized
 	}
 }
